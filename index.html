@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ Futebol da Segunda</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0a1a0a;
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  header {
+    background: linear-gradient(180deg, #0f3d1a 0%, #0a1a0a 100%);
+    border-bottom: 3px solid #f5c518;
+    padding: 28px 20px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  header .bola { font-size: 48px; line-height: 1; margin-bottom: 10px; }
+
+  header h1 {
+    font-weight: 900;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    letter-spacing: 0.1em;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  header p.semana {
+    color: #f5c518;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .btn-admin-acesso {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #888;
+    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .body {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px 16px 48px;
+  }
+
+  .stats { display: flex; gap: 10px; margin-bottom: 20px; }
+  .stat {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .stat-num { font-weight: 800; font-size: 26px; line-height: 1; }
+  .stat-label { font-size: 11px; color: #555; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .card {
+    background: #111e11;
+    border: 1.5px solid #1f3a1f;
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-meu {
+    background: linear-gradient(135deg, #0d2e18, #122a1a);
+    border-color: #2a6a3a;
+    box-shadow: 0 0 30px rgba(26,122,62,0.15);
+  }
+
+  .label-pequeno {
+    font-size: 11px; color: #555; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 10px; text-align: center;
+  }
+
+  .num-grande {
+    font-size: clamp(1.3rem, 5vw, 1.9rem);
+    font-weight: 800;
+    color: #6ee895;
+    text-align: center;
+    letter-spacing: 0.04em;
+    word-break: break-all;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .badge-ok {
+    display: block;
+    background: rgba(110,232,149,0.12);
+    border: 1px solid rgba(110,232,149,0.3);
+    color: #6ee895;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .instrucao { color: #555; font-size: 12px; text-align: center; margin-bottom: 18px; line-height: 1.5; }
+
+  .contador-livres {
+    font-size: 64px; font-weight: 900; color: #6ee895;
+    line-height: 1; margin: 8px 0; text-align: center;
+  }
+
+  .subtexto { color: #666; font-size: 13px; margin: 8px 0 24px; text-align: center; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: opacity 0.2s;
+  }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-principal {
+    background: linear-gradient(135deg, #1a7a3e, #22a352);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(26,122,62,0.4);
+  }
+
+  .btn-liberar {
+    background: rgba(192,57,43,0.15);
+    color: #e57368;
+    border: 1px solid rgba(192,57,43,0.3) !important;
+  }
+
+  .btn-secundario {
+    background: rgba(255,255,255,0.06);
+    color: #888;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin-top: 10px;
+    font-size: 13px;
+    padding: 11px;
+  }
+
+  .lista-box {
+    background: #0d170d;
+    border: 1px solid #1a2e1a;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .lista-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .lista-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+
+  .chip {
+    border-radius: 8px; padding: 8px 4px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-weight: 600; font-size: 10px;
+  }
+  .chip span:last-child { font-size: 9px; }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .overlay.ativo { display: flex; }
+
+  .modal {
+    background: #111e11;
+    border: 1.5px solid #2a4a2a;
+    border-radius: 20px 20px 0 0;
+    padding: 28px 24px 40px;
+    width: 100%;
+    max-width: 420px;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  .modal h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #f5c518;
+    margin-bottom: 6px;
+  }
+
+  .modal p.desc {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .modal input {
+    width: 100%;
+    padding: 13px 14px;
+    background: #0a1a0a;
+    border: 1.5px solid #2a3a2a;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #fff;
+    font-family: inherit;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .modal input:focus { border-color: #1a7a3e; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #1a2e1a;
+    margin: 16px 0;
+  }
+
+  .aviso-reset {
+    background: rgba(192,57,43,0.1);
+    border: 1px solid rgba(192,57,43,0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #e57368;
+    font-size: 12px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 13px;
+    font-weight: 600; z-index: 999; white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); max-width: 90vw;
+    text-align: center; display: none;
+  }
+
+  .rodape { text-align: center; color: #333; font-size: 11px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bola">⚽</div>
+  <h1>Futebol da Segunda</h1>
+  <p class="semana" id="semana-label">Carregando...</p>
+  <button class="btn-admin-acesso" onclick="abrirAdmin()" title="Admin">⚙️</button>
+</header>
+
+<div class="body">
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num" style="color:#fff" id="s-total">—</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:#6ee895" id="s-livres">—</div>
+      <div class="stat-label">Livres</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:#f5c518" id="s-retirados">—</div>
+      <div class="stat-label">Retirados</div>
+    </div>
+  </div>
+
+  <div class="card" id="tela-carregando">
+    <p style="color:#aaa; text-align:center; padding:20px 0">Carregando...</p>
+  </div>
+
+  <div class="card card-meu" id="tela-meu" style="display:none">
+    <p class="label-pequeno">Seu convite desta semana</p>
+    <div class="num-grande" id="meu-numero"></div>
+    <span class="badge-ok">✅ Confirmado</span>
+    <p class="instrucao">Apresente este número na entrada do clube na segunda-feira.</p>
+    <button class="btn btn-liberar" onclick="liberarConvite()">Liberar convite</button>
+  </div>
+
+  <div class="card" id="tela-disponivel" style="display:none; text-align:center">
+    <p class="label-pequeno">Convites disponíveis</p>
+    <div class="contador-livres" id="contador-livres">—</div>
+    <p class="subtexto">Clique abaixo para receber o seu número</p>
+    <button class="btn btn-principal" id="btn-pegar" onclick="pegarConvite()">⚽ Pegar meu convite</button>
+  </div>
+
+  <div class="card" id="tela-esgotado" style="display:none; text-align:center; padding:32px 20px">
+    <div style="font-size:40px; margin-bottom:12px">😬</div>
+    <p style="color:#f5c518; font-weight:700; font-size:18px">Todos os convites foram retirados!</p>
+    <p style="color:#666; font-size:13px; margin-top:8px">Fale com o organizador.</p>
+  </div>
+
+  <div class="lista-box" id="lista-box" style="display:none">
+    <p class="lista-label">Situação dos convites</p>
+    <div class="lista-grid" id="lista-grid"></div>
+  </div>
+
+  <p class="rodape">Atualiza automaticamente · Compartilhado em tempo real</p>
+</div>
+
+<!-- Modal: senha -->
+<div class="overlay" id="overlay-senha">
+  <div class="modal">
+    <h2>⚙️ Área Admin</h2>
+    <p class="desc">Digite a senha para acessar as configurações da semana.</p>
+    <label>Senha</label>
+    <input type="password" id="input-senha" placeholder="••••••" />
+    <button class="btn btn-principal" onclick="verificarSenha()">Entrar</button>
+    <button class="btn btn-secundario" onclick="fecharModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- Modal: configurações admin -->
+<div class="overlay" id="overlay-admin">
+  <div class="modal">
+    <h2>⚙️ Configurar Semana</h2>
+    <p class="desc">Defina o intervalo de convites e o nome da semana. Os convites reservados são mantidos até você resetar.</p>
+
+    <label>Número inicial</label>
+    <input type="text" id="input-inicio" placeholder="Ex: 056508298105" inputmode="numeric" />
+
+    <label>Número final</label>
+    <input type="text" id="input-fim" placeholder="Ex: 056508298119" inputmode="numeric" />
+
+    <label>Nome da semana</label>
+    <input type="text" id="input-semana" placeholder="Ex: Segunda, 30/06" />
+
+    <button class="btn btn-principal" onclick="salvarConfig()">💾 Salvar configuração</button>
+
+    <hr class="divider">
+
+    <div class="aviso-reset">
+      ⚠️ O reset apaga todos os convites reservados e libera tudo para a nova semana.
+    </div>
+    <button class="btn btn-liberar" onclick="resetarConvites()">🔄 Resetar convites da semana</button>
+    <button class="btn btn-secundario" onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SENHA   = "futebol2025";
+  const BIN_ID  = "6a308dc8f5f4af5e29f83e55";
+  const API_KEY = "$2a$10$l9NetpYsO7F2XtbgPTY.SuVrYlviwVVIhQpTjkMKZqllb0JvWvEJu";
+  const BIN_URL = "https://api.jsonbin.io/v3/b/" + BIN_ID;
+
+  function getUID() {
+    let uid = localStorage.getItem("futebol_uid");
+    if (!uid) {
+      uid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem("futebol_uid", uid);
+    }
+    return uid;
+  }
+  const uid = getUID();
+
+  async function lerBin() {
+    const res = await fetch(BIN_URL + "/latest", {
+      headers: { "X-Master-Key": API_KEY }
+    });
+    const json = await res.json();
+    return json.record || {};
+  }
+
+  async function gravarBin(data) {
+    await fetch(BIN_URL, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Master-Key": API_KEY },
+      body: JSON.stringify(data)
+    });
+  }
+
+  let estado = null;
+  let numeros = [];
+  let meuNum = null;
+  let processando = false;
+
+  function gerarNumeros(inicio, fim) {
+    const arr = [];
+    for (let n = BigInt(inicio); n <= BigInt(fim); n++) arr.push(String(n));
+    return arr;
+  }
+
+  function render() {
+    const convites   = estado.convites || {};
+    const total      = numeros.length;
+    const reservados = Object.keys(convites).length;
+    const livres     = total - reservados;
+    const esgotado   = livres === 0 && !meuNum;
+
+    document.getElementById("semana-label").textContent = estado.semana || "—";
+    document.getElementById("s-total").textContent      = total;
+    document.getElementById("s-livres").textContent     = livres;
+    document.getElementById("s-retirados").textContent  = reservados;
+
+    ["tela-carregando","tela-meu","tela-disponivel","tela-esgotado"].forEach(id => {
+      document.getElementById(id).style.display = "none";
+    });
+
+    if (meuNum) {
+      document.getElementById("meu-numero").textContent = meuNum;
+      document.getElementById("tela-meu").style.display = "block";
+    } else if (esgotado) {
+      document.getElementById("tela-esgotado").style.display = "block";
+    } else {
+      document.getElementById("contador-livres").textContent = livres;
+      document.getElementById("tela-disponivel").style.display = "block";
+    }
+
+    const grid = document.getElementById("lista-grid");
+    grid.innerHTML = "";
+    numeros.forEach(function(n) {
+      const ocupado = !!convites[n];
+      const meuEste = n === meuNum;
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.style.background = meuEste ? "#1a7a3e" : ocupado ? "#1e1e1e" : "#0d1f0d";
+      chip.style.border = "1.5px solid " + (meuEste ? "#6ee895" : ocupado ? "#333" : "#1f3a1f");
+      chip.style.color = meuEste ? "#6ee895" : ocupado ? "#444" : "#3a7a3a";
+      chip.innerHTML = "<span>" + n.slice(-4) + "</span><span>" + (meuEste ? "👤eu" : ocupado ? "🔴" : "🟢") + "</span>";
+      grid.appendChild(chip);
+    });
+    document.getElementById("lista-box").style.display = numeros.length ? "block" : "none";
+  }
+
+  async function carregar() {
+    try {
+      const dados = await lerBin();
+      estado  = dados;
+      numeros = gerarNumeros(dados.inicio || 56508298105, dados.fim || 56508298119);
+      const convites = dados.convites || {};
+      const meu = Object.entries(convites).find(function(e) { return e[1] === uid; });
+      meuNum = meu ? meu[0] : null;
+      render();
+    } catch(e) {
+      mostrarToast("Erro ao carregar dados.", "erro");
+    } finally {
+      document.getElementById("tela-carregando").style.display = "none";
+    }
+  }
+
+  async function pegarConvite() {
+    if (processando) return;
+    processando = true;
+    const btn = document.getElementById("btn-pegar");
+    btn.disabled = true;
+    btn.textContent = "⏳ Reservando...";
+    try {
+      const dados = await lerBin();
+      const convites = dados.convites || {};
+      const meu = Object.entries(convites).find(function(e) { return e[1] === uid; });
+      if (meu) {
+        meuNum = meu[0]; estado = dados; render();
+        mostrarToast("Você já tem o convite " + meu[0] + "!", "info");
+        return;
+      }
+      const livre = numeros.find(function(n) { return !convites[n]; });
+      if (!livre) { mostrarToast("Todos os convites já foram retirados!", "erro"); return; }
+      convites[livre] = uid;
+      dados.convites = convites;
+      await gravarBin(dados);
+      estado = dados; meuNum = livre;
+      render();
+      mostrarToast("✅ Convite " + livre + " é seu!");
+    } catch(e) {
+      mostrarToast("Erro ao reservar. Tente novamente.", "erro");
+    } finally {
+      processando = false;
+      if (btn) { btn.disabled = false; btn.textContent = "⚽ Pegar meu convite"; }
+    }
+  }
+
+  async function liberarConvite() {
+    if (!meuNum || processando) return;
+    processando = true;
+    try {
+      const dados = await lerBin();
+      delete dados.convites[meuNum];
+      await gravarBin(dados);
+      estado = dados; meuNum = null;
+      render();
+      mostrarToast("Convite liberado.", "info");
+    } catch(e) {
+      mostrarToast("Erro ao liberar. Tente novamente.", "erro");
+    } finally { processando = false; }
+  }
+
+  function abrirAdmin() {
+    document.getElementById("input-senha").value = "";
+    document.getElementById("overlay-senha").classList.add("ativo");
+    setTimeout(function() { document.getElementById("input-senha").focus(); }, 300);
+  }
+
+  function verificarSenha() {
+    const s = document.getElementById("input-senha").value;
+    if (s === SENHA) {
+      document.getElementById("overlay-senha").classList.remove("ativo");
+      document.getElementById("input-inicio").value = estado ? (estado.inicio || "") : "";
+      document.getElementById("input-fim").value    = estado ? (estado.fim    || "") : "";
+      document.getElementById("input-semana").value = estado ? (estado.semana || "") : "";
+      document.getElementById("overlay-admin").classList.add("ativo");
+    } else {
+      mostrarToast("Senha incorreta.", "erro");
+    }
+  }
+
+  async function salvarConfig() {
+    const inicio = document.getElementById("input-inicio").value.trim();
+    const fim    = document.getElementById("input-fim").value.trim();
+    const semana = document.getElementById("input-semana").value.trim();
+    if (!inicio || !fim || !semana) { mostrarToast("Preencha todos os campos.", "erro"); return; }
+    if (BigInt(inicio) > BigInt(fim)) { mostrarToast("Número inicial maior que o final!", "erro"); return; }
+    try {
+      const dados = await lerBin();
+      dados.inicio = inicio;
+      dados.fim    = fim;
+      dados.semana = semana;
+      await gravarBin(dados);
+      estado  = dados;
+      numeros = gerarNumeros(inicio, fim);
+      render();
+      fecharModal();
+      mostrarToast("✅ Configuração salva!");
+    } catch(e) {
+      mostrarToast("Erro ao salvar. Tente novamente.", "erro");
+    }
+  }
+
+  async function resetarConvites() {
+    if (!confirm("Tem certeza? Todos os convites reservados serão apagados.")) return;
+    try {
+      const dados = await lerBin();
+      dados.convites = {};
+      await gravarBin(dados);
+      estado = dados; meuNum = null;
+      render();
+      fecharModal();
+      mostrarToast("🔄 Convites resetados com sucesso!");
+    } catch(e) {
+      mostrarToast("Erro ao resetar. Tente novamente.", "erro");
+    }
+  }
+
+  function fecharModal() {
+    document.querySelectorAll(".overlay").forEach(function(o) { o.classList.remove("ativo"); });
+  }
+
+  document.querySelectorAll(".overlay").forEach(function(o) {
+    o.addEventListener("click", function(e) { if (e.target === o) fecharModal(); });
+  });
+
+  document.getElementById("input-senha").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") verificarSenha();
+  });
+
+  var toastTimer;
+  function mostrarToast(msg, tipo) {
+    tipo = tipo || "ok";
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.style.background = tipo === "erro" ? "#c0392b" : tipo === "info" ? "#1a4a6a" : "#1a7a3e";
+    t.style.display = "block";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.style.display = "none"; }, 3500);
+  }
+
+  carregar();
+  setInterval(carregar, 6000);
+</script>
+</body>
+</html>
