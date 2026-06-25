@@ -373,12 +373,16 @@ function renderConvites(s) {
     const val = reservas[n];
     const ocupado = !!val;
     const meuEste = n===meuNum;
-    const convidado = typeof val === "object";
+    const convidado = val && typeof val === "object";
+    const nomeConvidado = convidado ? val.convidado : null;
     const bg = meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#f0f0f0":"#f0faf4";
     const border = meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#ddd":"#b0ddc0";
     const cor = meuEste?"#fff":convidado?"#fff":ocupado?"#ccc":"#1a7a3e";
-    const icone = meuEste?"👤":convidado?"🎫":ocupado?"🔴":"🟢";
-    html += `<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor}"><span>${n.slice(-4)}</span><span>${icone}</span></div>`;
+    const label = meuEste?"👤 eu":convidado?nomeConvidado.split(" ")[0].substring(0,7):ocupado?"🔴":"🟢";
+    html += `<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor}" ${convidado?`onclick="toast('🎫 ${nomeConvidado} — Nº ${n}','info')"`:""}>
+      <span>${n.slice(-4)}</span>
+      <span style="font-size:${convidado?'8px':'10px'};text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span>
+    </div>`;
   });
   html += `</div></div></div>`;
 
