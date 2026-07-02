@@ -20,7 +20,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #fff; border-top: 1px solid #dde8dd; display: flex; padding: 8px 0 12px; z-index: 50; box-shadow: 0 -2px 12px rgba(0,0,0,.08); }
 .nav-btn { flex: 1; background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font-family: inherit; padding: 2px 0; color: #aaa; font-size: 9px; }
 .nav-btn.ativo { color: #1a7a3e; }
-.nav-btn span:first-child { font-size: 20px; }
+.nav-btn span:first-child { font-size: 18px; }
 
 .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
 .stat-card { background: #fff; border: 1px solid #dde8dd; border-radius: 12px; padding: 10px 6px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
@@ -46,6 +46,9 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 .nome-linha { flex: 1; font-size: 13px; font-weight: 600; color: #1a1a1a; }
 .churrasco-tag { width: 62px; font-size: 11px; font-weight: 600; padding: 4px 6px; border-radius: 8px; text-align: center; flex-shrink: 0; cursor: pointer; border: 1px solid #ddd; background: #f0f0f0; color: #aaa; font-family: inherit; }
 .churrasco-tag.sim { background: #fff0e8; color: #c85000; border-color: #e8c0a0; }
+.pago-tag { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 8px; flex-shrink: 0; cursor: pointer; font-family: inherit; border: none; }
+.pago-tag.pago { background: #e8f8ee; color: #1a7a3e; border: 1px solid #b0ddc0; }
+.pago-tag.pendente { background: #fff5f5; color: #c0392b; border: 1px solid #e8b0b0; }
 .btn-vaga { flex: 1; background: none; border: none; color: #aaa; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; padding: 0; font-style: italic; }
 
 .btn-principal { width: 100%; padding: 14px; background: linear-gradient(135deg,#1a7a3e,#22a352); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 4px; box-shadow: 0 4px 16px rgba(26,122,62,.2); }
@@ -53,19 +56,21 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 .btn-block { width: 100%; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; border: none; margin-bottom: 4px; }
 .btn-add-vaga { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 6px; border: 1.5px dashed #c8ddc8; background: #f5faf5; color: #1a7a3e; }
 .btn-add-ausente { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 6px; border: 1.5px dashed #e8b0b0; background: #fff5f5; color: #c0392b; }
-
-.form-inline { border-radius: 12px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; }
-.form-inline.verde { background: #f0faf4; border: 1px solid #b0ddc0; }
-.form-inline.cinza { background: #f5f8f5; border: 1px solid #c8d8c8; }
-.form-inline.vermelho { background: #fff5f5; border: 1px solid #e8b0b0; }
-.form-inline.laranja { background: #fff8f0; border: 1px solid #e8c8a0; }
-.form-row { display: flex; gap: 8px; }
+.btn-copiar { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 4px; border: 1.5px solid #c0d0e8; background: #f0f4fa; color: #1a5a8a; }
 
 .input { width: 100%; padding: 11px 12px; background: #fff; border: 1.5px solid #c8d8c8; border-radius: 10px; font-size: 14px; color: #1a1a1a; font-family: inherit; outline: none; }
 .input::placeholder { color: #777; }
 .input:focus { border-color: #1a7a3e; }
 .label { display: block; font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
 .check-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; cursor: pointer; }
+
+/* Autocomplete */
+.autocomplete-box { position: relative; }
+.autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1.5px solid #1a7a3e; border-top: none; border-radius: 0 0 10px 10px; z-index: 200; max-height: 160px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+.autocomplete-item { padding: 10px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.autocomplete-item:hover { background: #f0faf4; }
+.autocomplete-item.mensalista { color: #1a7a3e; font-weight: 600; }
+.autocomplete-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 8px; background: #e0f5e8; color: #1a7a3e; border: 1px solid #b0ddc0; }
 
 .churrasco-status { background: linear-gradient(135deg,#1a3a22,#1a5a30); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 16px rgba(26,90,48,.15); }
 .pix-card { background: #fff; border: 1px solid #dde8dd; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
@@ -86,6 +91,17 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 .tot-card.pendente { background: #fff5f5; border: 1px solid #e8b0b0; }
 .progress-bar { height: 6px; background: #e8ebe8; border-radius: 10px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg,#1a7a3e,#5ad08a); border-radius: 10px; transition: width .4s; }
+
+/* CAIXA */
+.saldo-card { background: linear-gradient(135deg,#1a3a22,#1a5a30); border-radius: 16px; padding: 24px 20px; margin-bottom: 14px; text-align: center; box-shadow: 0 4px 16px rgba(26,90,48,.15); }
+.linha-mov { display: flex; align-items: center; gap: 8px; padding: 10px 8px; border-radius: 10px; margin-bottom: 3px; border: 1px solid #eef0ee; background: #fff; }
+.mov-tipo { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mov-tipo.entrada { background: #e8f8ee; }
+.mov-tipo.saida { background: #fff5f5; }
+
+/* MENSALISTAS */
+.mens-card { background: linear-gradient(135deg,#1a3a6a,#1a5a8a); border-radius: 16px; padding: 20px; margin-bottom: 14px; box-shadow: 0 4px 16px rgba(26,58,106,.15); }
+.linha-mens { display: flex; align-items: center; gap: 8px; padding: 10px 8px; border-radius: 10px; margin-bottom: 3px; background: #fff; border: 1px solid #dde8dd; }
 
 .convites-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }
 .convite-chip { border-radius: 8px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 600; font-size: 10px; border: 1.5px solid; }
@@ -132,7 +148,8 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
     <button class="nav-btn" id="nav0" onclick="setAba(0)"><span>⚽</span><span>Convites</span></button>
     <button class="nav-btn" id="nav1" onclick="setAba(1)"><span>📋</span><span>Lista</span></button>
     <button class="nav-btn" id="nav2" onclick="setAba(2)"><span>🍖</span><span>Churrasco</span></button>
-    <button class="nav-btn" id="nav3" onclick="setAba(3)"><span>💰</span><span>Caixa</span></button>
+    <button class="nav-btn" id="nav3" onclick="setAba(3)"><span>👥</span><span>Mensalistas</span></button>
+    <button class="nav-btn" id="nav4" onclick="setAba(4)"><span>💰</span><span>Caixa</span></button>
   </div>
 </div>
 
@@ -151,7 +168,9 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
     <div class="modal-header"><span class="modal-titulo">⚙️ Admin</span><button class="btn-fechar" onclick="fecharModal('overlay-admmenu')">✕</button></div>
     <div style="display:flex;flex-direction:column;gap:10px">
       <button class="btn-block" style="background:#fffbf0;color:#a08000;border:1px solid #e8d890" onclick="fecharModal('overlay-admmenu');abrirNovaSemana()">🗓️ Nova semana</button>
+      <button class="btn-block" style="background:#f0f4fa;color:#1a3a6a;border:1px solid #c0cce8" onclick="fecharModal('overlay-admmenu');editarNomeSemana()">✏️ Editar nome da semana</button>
       <button class="btn-block" style="background:#f0faf4;color:#1a7a3e;border:1px solid #b0ddc0" onclick="fecharModal('overlay-admmenu');abrirHistorico()">📚 Ver histórico</button>
+      <button class="btn-block" style="background:#fff8f5;color:#c85000;border:1px solid #e8c0a0" onclick="fecharModal('overlay-admmenu');limparHistorico()">🗑️ Limpar histórico</button>
       <button class="btn-block" style="background:#fff5f5;color:#c0392b;border:1px solid #e8b0b0" onclick="fecharModal('overlay-admmenu');sairAdm()">🔒 Sair do ADM</button>
     </div>
   </div>
@@ -210,7 +229,10 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
       <button class="btn-fechar" onclick="fecharModal('overlay-entrada')">✕</button>
     </div>
     <label class="label">Seu nome</label>
-    <input class="input" id="entrada-nome" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:14px"/>
+    <div class="autocomplete-box" style="margin-bottom:14px">
+      <input class="input" id="entrada-nome" placeholder="Digite seu nome" autocomplete="off" oninput="filtrarMensalistas()" onfocus="filtrarMensalistas()"/>
+      <div class="autocomplete-list" id="autocomplete-list" style="display:none"></div>
+    </div>
     <label class="check-label" style="margin-bottom:18px"><input type="checkbox" id="entrada-ch" /> Vou ao churrasco</label>
     <button class="btn-block" id="entrada-confirmar" style="background:#1a7a3e;color:#fff;margin-top:8px">Confirmar</button>
     <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-entrada')">Cancelar</button>
@@ -219,12 +241,12 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 
 <div class="overlay" id="overlay-espera-modal">
   <div class="modal">
-    <div class="modal-header">
-      <span class="modal-titulo">⏳ Lista de Espera</span>
-      <button class="btn-fechar" onclick="fecharModal('overlay-espera-modal')">✕</button>
-    </div>
+    <div class="modal-header"><span class="modal-titulo">⏳ Lista de Espera</span><button class="btn-fechar" onclick="fecharModal('overlay-espera-modal')">✕</button></div>
     <label class="label">Seu nome</label>
-    <input class="input" id="em-nome" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:14px"/>
+    <div class="autocomplete-box" style="margin-bottom:14px">
+      <input class="input" id="em-nome" placeholder="Digite seu nome" autocomplete="off" oninput="filtrarMensalistasEspera()" onfocus="filtrarMensalistasEspera()"/>
+      <div class="autocomplete-list" id="autocomplete-list-espera" style="display:none"></div>
+    </div>
     <label class="check-label" style="margin-bottom:18px"><input type="checkbox" id="em-ch" /> Vou ao churrasco</label>
     <button class="btn-block" style="background:#a08000;color:#fff;margin-top:8px" onclick="confirmarEsperaModal()">Confirmar</button>
     <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-espera-modal')">Cancelar</button>
@@ -233,10 +255,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 
 <div class="overlay" id="overlay-ausente-modal">
   <div class="modal">
-    <div class="modal-header">
-      <span class="modal-titulo">Informar ausência</span>
-      <button class="btn-fechar" onclick="fecharModal('overlay-ausente-modal')">✕</button>
-    </div>
+    <div class="modal-header"><span class="modal-titulo">Informar ausência</span><button class="btn-fechar" onclick="fecharModal('overlay-ausente-modal')">✕</button></div>
     <label class="label">Nome</label>
     <input class="input" id="am-nome" placeholder="Nome do ausente" autocomplete="off" style="margin-bottom:12px"/>
     <label class="label">Motivo (opcional)</label>
@@ -249,10 +268,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 
 <div class="overlay" id="overlay-convidado-modal">
   <div class="modal">
-    <div class="modal-header">
-      <span class="modal-titulo">👤 Convite para convidado</span>
-      <button class="btn-fechar" onclick="fecharModal('overlay-convidado-modal')">✕</button>
-    </div>
+    <div class="modal-header"><span class="modal-titulo">👤 Convite para convidado</span><button class="btn-fechar" onclick="fecharModal('overlay-convidado-modal')">✕</button></div>
     <p style="color:#888;font-size:13px;margin-bottom:16px;line-height:1.5">O sistema vai reservar um número da sequência para o convidado.</p>
     <label class="label">Nome do convidado</label>
     <input class="input" id="cv-nome" placeholder="Nome completo" autocomplete="off" style="margin-bottom:18px"/>
@@ -260,6 +276,35 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
     <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-convidado-modal')">Cancelar</button>
   </div>
 </div>
+
+<!-- Modal Caixa - Nova movimentação -->
+<div class="overlay" id="overlay-mov">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-titulo" id="mov-titulo">Nova Movimentação</span><button class="btn-fechar" onclick="fecharModal('overlay-mov')">✕</button></div>
+    <label class="label">Descrição</label>
+    <input class="input" id="mov-desc" placeholder="Ex: Aluguel da quadra" style="margin-bottom:12px"/>
+    <label class="label">Valor (R$)</label>
+    <input class="input" id="mov-valor" type="number" placeholder="Ex: 200.00" style="margin-bottom:18px"/>
+    <button class="btn-block" id="mov-confirmar" style="background:#1a7a3e;color:#fff">Confirmar</button>
+    <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-mov')">Cancelar</button>
+  </div>
+</div>
+
+<!-- Modal Mensalistas - Configurar -->
+<div class="overlay" id="overlay-mens-cfg">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-titulo">👥 Configurar Mensalidade</span><button class="btn-fechar" onclick="fecharModal('overlay-mens-cfg')">✕</button></div>
+    <label class="label">Valor do avulso (R$)</label>
+    <input class="input" id="mens-avulso" type="number" placeholder="Ex: 25.00" style="margin-bottom:12px"/>
+    <label class="label">Valor base da mensalidade (R$)</label>
+    <input class="input" id="mens-base" type="number" placeholder="Ex: 80.00" style="margin-bottom:18px"/>
+    <p style="font-size:11px;color:#aaa;margin-bottom:18px;line-height:1.5">O valor da mensalidade será dividido entre todos os mensalistas do mês.</p>
+    <button class="btn-block" style="background:#1a3a6a;color:#fff" onclick="salvarMensCfg()">💾 Salvar</button>
+    <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-mens-cfg')">Cancelar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const BIN_ID  = "6a308dc8f5f4af5e29f83e55";
@@ -270,36 +315,48 @@ const SENHA_ADM = "astti2025";
 let dados = null;
 let abaAtual = 1;
 let isAdmin = false;
-let formAtivo = null;
+let entradaTipo = null;
+let entradaIdx = null;
 let uid = localStorage.getItem("astti_uid") || (()=>{ const u=Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem("astti_uid",u); return u; })();
+
+function mesAtual() {
+  return new Date().toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+}
 
 function semanaVazia() {
   const data = new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});
+  return { data, dataPartida:"", convites:{inicio:"56508298105",fim:"56508298119",semana:data,reservas:{}}, goleiros:[{id:"g1",nome:"",churrasco:false},{id:"g2",nome:"",churrasco:false}], jogadores:Array.from({length:14},(_,i)=>({id:i+1,nome:"",churrasco:false,avulso:false,avulsoPago:false})), espera:[], ausentes:[], churrasco:{confirmado:false,responsavel:"",valorTotal:0,pixChave:"",pixTipo:"Celular",extras:[],pagos:[]} };
+}
+
+function dadosIniciais() {
   return {
-    data,
-    convites: { inicio:"56508298105", fim:"56508298119", semana:data, reservas:{} },
-    goleiros: [{id:"g1",nome:"",churrasco:false},{id:"g2",nome:"",churrasco:false}],
-    jogadores: Array.from({length:14},(_,i)=>({id:i+1,nome:"",churrasco:false})),
-    espera: [],
-    ausentes: [],
-    churrasco: { confirmado:false, responsavel:"", valorTotal:0, pixChave:"", pixTipo:"Celular", extras:[], pagos:[] }
+    semanaAtual: semanaVazia(),
+    historico: [],
+    mensalistas: {
+      mes: mesAtual(),
+      valorBase: 80,
+      valorAvulso: 25,
+      membros: [] // [{nome, pago, uid}]
+    },
+    caixa: {
+      movimentacoes: [] // [{id, tipo:"entrada"|"saida", desc, valor, data, origem}]
+    }
   };
 }
 
 async function lerBin() {
   const res = await fetch(BIN_URL+"/latest",{headers:{"X-Master-Key":API_KEY}});
   const json = await res.json();
-  return json.record || {semanaAtual:semanaVazia(),historico:[]};
+  const d = json.record || dadosIniciais();
+  if (!d.mensalistas) d.mensalistas = { mes:mesAtual(), valorBase:80, valorAvulso:25, membros:[] };
+  if (!d.caixa) d.caixa = { movimentacoes:[] };
+  return d;
 }
 
 async function gravarBin(d) {
   document.getElementById("salvando-txt").style.display="inline";
-  try {
-    await fetch(BIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)});
-    dados = d;
-  } finally {
-    document.getElementById("salvando-txt").style.display="none";
-  }
+  try { await fetch(BIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify(d)}); dados=d; }
+  finally { document.getElementById("salvando-txt").style.display="none"; }
 }
 
 async function init() {
@@ -311,11 +368,11 @@ async function init() {
     dados = d;
     renderAba();
   } catch { toast("Erro ao carregar dados","erro"); }
-  setInterval(async()=>{ try{ const d=await lerBin(); dados=d; if(formAtivo===null) renderAba(); }catch{} },8000);
+  setInterval(async()=>{ try{ const d=await lerBin(); dados=d; renderAba(); }catch{} },8000);
 }
 
 function setAba(n) {
-  abaAtual=n; formAtivo=null;
+  abaAtual=n;
   document.querySelectorAll(".nav-btn").forEach((b,i)=>b.classList.toggle("ativo",i===n));
   if (dados) renderAba();
 }
@@ -328,19 +385,19 @@ function renderAba() {
   if (abaAtual===0) body.innerHTML = renderConvites(s);
   else if (abaAtual===1) body.innerHTML = renderLista(s);
   else if (abaAtual===2) body.innerHTML = renderChurrasco(s);
-  else body.innerHTML = `<div class="placeholder"><div style="font-size:48px;margin-bottom:16px">💰</div><p style="color:#bbb;font-size:15px;font-weight:600">Caixa</p><p style="color:#ccc;font-size:12px;margin-top:6px">Em breve</p></div>`;
+  else if (abaAtual===3) body.innerHTML = renderMensalistas();
+  else if (abaAtual===4) body.innerHTML = renderCaixa();
 }
 
 // ── CONVITES ──────────────────────────────────────────────────────────────────
 function renderConvites(s) {
-  const cv = s.convites||{}; const reservas = cv.reservas||{};
-  const inicio = parseInt(cv.inicio||"56508298105"); const fim = parseInt(cv.fim||"56508298119");
-  const numeros = []; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
-  const meuNum = Object.entries(reservas).find(([,u])=>u===uid)?.[0]||null;
-  const livres = numeros.filter(n=>!reservas[n]).length;
-  const retirados = numeros.length - livres;
+  const cv=s.convites||{}; const reservas=cv.reservas||{};
+  const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
+  const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
+  const meuNum=Object.entries(reservas).find(([,u])=>u===uid)?.[0]||null;
+  const livres=numeros.filter(n=>!reservas[n]).length; const retirados=numeros.length-livres;
 
-  let html = `<div class="stats-row">
+  let html=`<div class="stats-row">
     <div class="stat-card"><div class="stat-num" style="color:#333">${numeros.length}</div><div class="stat-label">Total</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#1a7a3e">${livres}</div><div class="stat-label">Livres</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#a08000">${retirados}</div><div class="stat-label">Retirados</div></div>
@@ -348,7 +405,7 @@ function renderConvites(s) {
   </div>`;
 
   if (meuNum) {
-    html += `<div style="background:linear-gradient(135deg,#1a3a22,#1a5a30);border-radius:16px;padding:24px 20px;margin-bottom:16px;text-align:center;box-shadow:0 4px 16px rgba(26,90,48,.15)">
+    html+=`<div style="background:linear-gradient(135deg,#1a3a22,#1a5a30);border-radius:16px;padding:24px 20px;margin-bottom:16px;text-align:center;box-shadow:0 4px 16px rgba(26,90,48,.15)">
       <p style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Seu convite desta semana</p>
       <div style="font-size:clamp(1.3rem,5vw,1.9rem);font-weight:800;color:#a8f0c0;word-break:break-all;margin-bottom:10px;letter-spacing:.04em">${meuNum}</div>
       <span style="display:block;background:rgba(255,255,255,.12);color:#fff;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;margin-bottom:14px">✅ Confirmado</span>
@@ -356,9 +413,9 @@ function renderConvites(s) {
       <button class="btn-small" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);width:100%;padding:12px;font-size:14px" onclick="liberarConvite()">Liberar convite</button>
     </div>`;
   } else if (livres===0) {
-    html += `<div class="secao"><div class="secao-body" style="text-align:center;padding:32px"><div style="font-size:40px;margin-bottom:12px">😬</div><p style="color:#a08000;font-weight:700;font-size:18px">Todos retirados!</p><p style="color:#aaa;font-size:13px;margin-top:8px">Fale com o organizador.</p></div></div>`;
+    html+=`<div class="secao"><div class="secao-body" style="text-align:center;padding:32px"><div style="font-size:40px;margin-bottom:12px">😬</div><p style="color:#a08000;font-weight:700;font-size:18px">Todos retirados!</p></div></div>`;
   } else {
-    html += `<div class="secao"><div class="secao-body" style="text-align:center;padding:20px">
+    html+=`<div class="secao"><div class="secao-body" style="text-align:center;padding:20px">
       <p style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Convites disponíveis</p>
       <div style="font-size:64px;font-weight:900;color:#1a7a3e;line-height:1;margin:8px 0">${livres}</div>
       <p style="color:#aaa;font-size:13px;margin:8px 0 20px">Clique abaixo para receber o seu número</p>
@@ -367,246 +424,308 @@ function renderConvites(s) {
     </div></div>`;
   }
 
-  // Grade
-  html += `<div class="secao"><div class="secao-header"><span class="secao-titulo">SITUAÇÃO DOS CONVITES</span></div><div class="secao-body"><div class="convites-grid">`;
+  html+=`<div class="secao"><div class="secao-header"><span class="secao-titulo">SITUAÇÃO DOS CONVITES</span></div><div class="secao-body"><div class="convites-grid">`;
   numeros.forEach(n=>{
-    const val = reservas[n];
-    const ocupado = !!val;
-    const meuEste = n===meuNum;
-    const convidado = val && typeof val === "object";
-    const nomeConvidado = convidado ? val.convidado : null;
-    const bg = meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#f0f0f0":"#f0faf4";
-    const border = meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#ddd":"#b0ddc0";
-    const cor = meuEste?"#fff":convidado?"#fff":ocupado?"#ccc":"#1a7a3e";
-    const label = meuEste?"👤 eu":convidado?nomeConvidado.split(" ")[0].substring(0,7):ocupado?"🔴":"🟢";
-    html += `<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor}" ${convidado?`onclick="toast('🎫 ${nomeConvidado} — Nº ${n}','info')"`:""}>
+    const val=reservas[n]; const ocupado=!!val; const meuEste=n===meuNum;
+    const convidado=val&&typeof val==="object";
+    const nomeConvidado=convidado?val.convidado:null;
+    const bg=meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#f0f0f0":"#f0faf4";
+    const border=meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#ddd":"#b0ddc0";
+    const cor=meuEste?"#fff":convidado?"#fff":ocupado?"#ccc":"#1a7a3e";
+    const label=meuEste?"👤 eu":convidado?nomeConvidado.split(" ")[0].substring(0,7):ocupado?"🔴":"🟢";
+    html+=`<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor}" ${convidado?`onclick="toast('🎫 ${nomeConvidado} — Nº ${n}','info')"`:""}>
       <span>${n.slice(-4)}</span>
       <span style="font-size:${convidado?'8px':'10px'};text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span>
     </div>`;
   });
-  html += `</div></div></div>`;
-
-  if (isAdmin) html += `<button class="btn-add-vaga" onclick="abrirConvitesCfg()" style="border-color:#c0d0e8;color:#1a5a8a;background:#f0f4fa;margin-top:4px">⚙️ Configurar intervalo</button>`;
+  html+=`</div></div></div>`;
+  if (isAdmin) html+=`<button class="btn-add-vaga" onclick="abrirConvitesCfg()" style="border-color:#c0d0e8;color:#1a5a8a;background:#f0f4fa;margin-top:4px">⚙️ Configurar intervalo</button>`;
   return html;
 }
 
 async function pegarConvite() {
   try {
-    const d = await lerBin();
-    const cv = d.semanaAtual.convites||{}; const reservas = cv.reservas||{};
+    const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
     const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
     const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
-    const meu = Object.entries(reservas).find(([,u])=>u===uid);
-    if (meu) { dados=d; renderAba(); toast("Você já tem o convite "+meu[0]+"!","info"); return; }
-    const livre = numeros.find(n=>!reservas[n]);
-    if (!livre) { toast("Todos os convites foram retirados!","erro"); return; }
-    reservas[livre] = uid;
-    d.semanaAtual.convites.reservas = reservas;
+    const meu=Object.entries(reservas).find(([,u])=>u===uid);
+    if(meu){dados=d;renderAba();toast("Você já tem o convite "+meu[0]+"!","info");return;}
+    const livre=numeros.find(n=>!reservas[n]);
+    if(!livre){toast("Todos os convites foram retirados!","erro");return;}
+    reservas[livre]=uid; d.semanaAtual.convites.reservas=reservas;
     await gravarBin(d); renderAba(); toast("✅ Convite "+livre+" é seu!");
-  } catch { toast("Erro ao reservar","erro"); }
+  } catch{toast("Erro ao reservar","erro");}
 }
 
 async function liberarConvite() {
   try {
-    const d = await lerBin(); const reservas = d.semanaAtual.convites?.reservas||{};
-    const meu = Object.entries(reservas).find(([,u])=>u===uid);
-    if (meu) { delete reservas[meu[0]]; d.semanaAtual.convites.reservas=reservas; await gravarBin(d); renderAba(); toast("Convite liberado","info"); }
-  } catch { toast("Erro ao liberar","erro"); }
+    const d=await lerBin(); const reservas=d.semanaAtual.convites?.reservas||{};
+    const meu=Object.entries(reservas).find(([,u])=>u===uid);
+    if(meu){delete reservas[meu[0]];d.semanaAtual.convites.reservas=reservas;await gravarBin(d);renderAba();toast("Convite liberado","info");}
+  } catch{toast("Erro ao liberar","erro");}
 }
 
-function abrirFormConvidado() { formAtivo="convidado"; renderAba(); setTimeout(()=>document.getElementById("form-convidado-nome")?.focus(),100); }
+function abrirFormConvidado(){abrirModal("overlay-convidado-modal");setTimeout(()=>document.getElementById("cv-nome").focus(),300);}
 
-async function confirmarConvidado() {
-  const nome = document.getElementById("form-convidado-nome")?.value?.trim();
-  if (!nome) { toast("Digite o nome do convidado","erro"); return; }
+async function confirmarConvidadoModal() {
+  const nome=document.getElementById("cv-nome").value.trim();
+  if(!nome){toast("Digite o nome do convidado","erro");return;}
   try {
-    const d = await lerBin();
-    const cv = d.semanaAtual.convites||{}; const reservas = cv.reservas||{};
+    const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
     const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
     const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
-    const livre = numeros.find(n=>!reservas[n]);
-    if (!livre) { toast("Sem convites disponíveis!","erro"); return; }
-    reservas[livre] = { convidado: nome, geradoPor: uid };
-    d.semanaAtual.convites.reservas = reservas;
-    await gravarBin(d); formAtivo=null; renderAba();
+    const livre=numeros.find(n=>!reservas[n]);
+    if(!livre){toast("Sem convites disponíveis!","erro");return;}
+    reservas[livre]={convidado:nome,geradoPor:uid};
+    d.semanaAtual.convites.reservas=reservas;
+    await gravarBin(d);fecharModal("overlay-convidado-modal");renderAba();
     toast("🎫 Convite "+livre+" gerado para "+nome+"!");
-  } catch { toast("Erro ao gerar convite","erro"); }
+  } catch{toast("Erro ao gerar convite","erro");}
 }
 
 // ── LISTA ─────────────────────────────────────────────────────────────────────
-function renderLista(s) {
-  const totalJog = s.jogadores.filter(j=>j.nome).length;
-  const vagasLivres = s.jogadores.filter(j=>!j.nome).length;
-  const totalCh = getParticipantesChurrasco(s).length;
-  const espera = s.espera||[]; const ausentes = s.ausentes||[];
+function getNomesMensalistas() {
+  return (dados?.mensalistas?.membros||[]).map(m=>m.nome);
+}
 
-  let html = `<div class="stats-row">
+function renderLista(s) {
+  const totalJog=s.jogadores.filter(j=>j.nome).length;
+  const vagasLivres=s.jogadores.filter(j=>!j.nome).length;
+  const totalCh=getParticipantesChurrasco(s).length;
+  const espera=s.espera||[]; const ausentes=s.ausentes||[];
+  const mensalistas=getNomesMensalistas();
+
+  let html=`<div class="stats-row">
     <div class="stat-card"><div class="stat-num" style="color:#1a7a3e">${totalJog}</div><div class="stat-label">Jogadores</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#a08000">${vagasLivres}</div><div class="stat-label">Vagas</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#c85000">${totalCh}</div><div class="stat-label">Churrasco</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#aaa">${espera.length}</div><div class="stat-label">Espera</div></div>
   </div>`;
 
-  // GOLEIROS
-  let gRows = s.goleiros.map((g,i)=>{
-    return `<div class="linha linha-goleiro${!g.nome?" vazio":""}">
-      <span class="gl-badge">GL${i+1}</span>
-      ${g.nome
-        ? `<span class="nome-linha">${g.nome}</span>
-           <button class="churrasco-tag${g.churrasco?" sim":""}" onclick="toggleChurrasco('goleiro',${i})">${g.churrasco?"🍖 Sim":"Não"}</button>
-           <button style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:2px;flex-shrink:0" onclick="removerGoleiro(${i})">✕</button>`
-        : `<button class="btn-vaga" onclick="abrirModalEntrada('goleiro',${i})">Vaga disponível — toque para entrar</button>`
-      }
-    </div>`;
-  }).join("");
+  // Botão copiar lista
+  html+=`<button class="btn-copiar" onclick="copiarLista()">📋 Copiar lista para WhatsApp</button>`;
 
-  html += secaoHtml("GOLEIROS",`${s.goleiros.filter(g=>g.nome).length}/2`,"#1a7a3e","#e0f5e8","#b0ddc0", gRows);
+  // GOLEIROS
+  let gRows=s.goleiros.map((g,i)=>`<div class="linha linha-goleiro${!g.nome?" vazio":""}">
+    <span class="gl-badge">GL${i+1}</span>
+    ${g.nome
+      ?`<span class="nome-linha">${g.nome}${mensalistas.includes(g.nome)?'<span style="font-size:9px;color:#1a7a3e;font-weight:700;margin-left:4px">M</span>':''}</span>
+        <button class="churrasco-tag${g.churrasco?" sim":""}" onclick="toggleChurrasco('goleiro',${i})">${g.churrasco?"🍖 Sim":"Não"}</button>
+        <button style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:2px;flex-shrink:0" onclick="removerGoleiro(${i})">✕</button>`
+      :`<button class="btn-vaga" onclick="abrirModalEntrada('goleiro',${i})">Vaga disponível — toque para entrar</button>`
+    }
+  </div>`).join("");
+  html+=secaoHtml("GOLEIROS",`${s.goleiros.filter(g=>g.nome).length}/2`,"#1a7a3e","#e0f5e8","#b0ddc0",gRows);
 
   // JOGADORES
-  const thJog = `<div class="th-row"><span style="width:20px">#</span><span style="flex:1">Nome</span><span style="width:72px;text-align:center">Churrasco</span></div>`;
-  let jRows = s.jogadores.map((j,i)=>{
+  const thJog=`<div class="th-row"><span style="width:20px">#</span><span style="flex:1">Nome</span><span style="width:62px;text-align:center">Churrasco</span><span style="width:55px;text-align:center">Avulso</span></div>`;
+  let jRows=s.jogadores.map((j,i)=>{
+    const ehMensalista=mensalistas.includes(j.nome);
+    const ehAvulso=j.nome&&!ehMensalista;
     return `<div class="linha linha-jogador${!j.nome?" vazio":""}">
       <span class="num-jogador">${j.id}</span>
       ${j.nome
-        ? `<span class="nome-linha">${j.nome}</span>
-           <button class="churrasco-tag${j.churrasco?" sim":""}" onclick="toggleChurrasco('jogador',${i})">${j.churrasco?"🍖 Sim":"Não"}</button>
-           <button style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:2px;flex-shrink:0" onclick="removerJogador(${i})">✕</button>`
-        : `<button class="btn-vaga" onclick="abrirModalEntrada('jogador',${i})">Vaga livre — toque para entrar</button>`
+        ?`<span class="nome-linha">${j.nome}${ehMensalista?'<span style="font-size:9px;color:#1a7a3e;font-weight:700;margin-left:4px">M</span>':''}</span>
+          <button class="churrasco-tag${j.churrasco?" sim":""}" onclick="toggleChurrasco('jogador',${i})">${j.churrasco?"🍖":"Não"}</button>
+          ${ehAvulso?`<button class="pago-tag ${j.avulsoPago?"pago":"pendente"}" onclick="toggleAvulsoPago(${i})">${j.avulsoPago?"✅ Pago":"💰 Pagar"}</button>`:`<span style="width:55px"></span>`}
+          <button style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 6px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0" onclick="removerJogador(${i})">✕</button>`
+        :`<button class="btn-vaga" onclick="abrirModalEntrada('jogador',${i})">Vaga livre — toque para entrar</button>`
       }
     </div>`;
   }).join("");
+  jRows+=`<button class="btn-add-vaga" onclick="adicionarVaga()"><span style="font-size:18px;font-weight:700">+</span> Adicionar vaga</button>`;
+  html+=secaoHtml("JOGADORES",`${totalJog}/${s.jogadores.length}`,"#1a5a8a","#eef2fa","#c0cce8",thJog+jRows);
 
-  // Botão + para adicionar vaga
-  jRows += `<button class="btn-add-vaga" onclick="adicionarVaga()"><span style="font-size:18px;font-weight:700">+</span> Adicionar vaga</button>`;
-
-  html += secaoHtml("JOGADORES",`${totalJog}/${s.jogadores.length}`,"#1a5a8a","#eef2fa","#c0cce8", thJog + jRows);
-
-  // ESPERA — sempre visível
-  let eRows = espera.length > 0
-    ? espera.map((e,i)=>`<div class="linha linha-espera">
+  // ESPERA
+  let eRows=espera.length>0
+    ?espera.map((e,i)=>`<div class="linha linha-espera">
         <span style="font-size:11px;font-weight:700;color:#a08000;width:20px">${i+1}º</span>
         <span class="nome-linha" style="color:#705800">${e.nome}</span>
         <span class="churrasco-tag${e.churrasco?" sim":""}">${e.churrasco?"🍖 Sim":"Não"}</span>
       </div>`).join("")
-    : `<p style="font-size:12px;color:#ccc;text-align:center;padding:8px 0;font-style:italic">Nenhum jogador na espera</p>`;
-  eRows += `<button class="btn-add-vaga" style="border-color:#e8d890;color:#a08000;background:#fffbf0;margin-top:4px" onclick="abrirModalEspera()">+ Entrar na lista de espera</button>`;
-  html += secaoHtml("LISTA DE ESPERA", espera.length, "#a08000","#fffbf0","#e8d890", eRows);
+    :`<p style="font-size:12px;color:#ccc;text-align:center;padding:8px 0;font-style:italic">Nenhum jogador na espera</p>`;
+  eRows+=`<button class="btn-add-vaga" style="border-color:#e8d890;color:#a08000;background:#fffbf0;margin-top:4px" onclick="abrirModalEspera()">+ Entrar na lista de espera</button>`;
+  html+=secaoHtml("LISTA DE ESPERA",espera.length,"#a08000","#fffbf0","#e8d890",eRows);
 
   // AUSENTES
-  const thAus = `<div class="th-row"><span style="width:20px">#</span><span style="flex:1">Nome · Motivo</span><span style="width:72px;text-align:center">Churrasco</span></div>`;
-  let aRows = ausentes.map((a,i)=>`<div class="linha linha-ausente">
+  const thAus=`<div class="th-row"><span style="width:20px">#</span><span style="flex:1">Nome · Motivo</span><span style="width:72px;text-align:center">Churrasco</span></div>`;
+  let aRows=ausentes.map((a,i)=>`<div class="linha linha-ausente">
     <span style="font-size:11px;font-weight:700;color:#c0392b;width:20px;flex-shrink:0">${i+1}</span>
     <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#c0392b">${a.nome}</div>${a.motivo?`<div style="font-size:10px;color:#aaa;margin-top:1px">${a.motivo}</div>`:""}</div>
     <span class="churrasco-tag${a.churrasco?" sim":""}">${a.churrasco?"🍖 Sim":"Não"}</span>
   </div>`).join("");
-
-  aRows += `<button class="btn-add-ausente" onclick="abrirModalAusente()">+ Informar ausência</button>`;
-
-  html += secaoHtml("AUSENTES", ausentes.length, "#c0392b","#fff5f5","#e8b0b0", thAus + aRows);
+  aRows+=`<button class="btn-add-ausente" onclick="abrirModal('overlay-ausente-modal')">+ Informar ausência</button>`;
+  html+=secaoHtml("AUSENTES",ausentes.length,"#c0392b","#fff5f5","#e8b0b0",thAus+aRows);
   return html;
 }
 
 function secaoHtml(titulo,badge,cor,bgLight,borderLight,innerHtml) {
-  return `<div class="secao">
-    <div class="secao-header">
-      <span class="secao-titulo">${titulo}</span>
-      <span class="secao-badge" style="background:${bgLight};color:${cor};border:1px solid ${borderLight}">${badge}</span>
-    </div>
-    <div class="secao-body">${innerHtml}</div>
-  </div>`;
+  return `<div class="secao"><div class="secao-header"><span class="secao-titulo">${titulo}</span><span class="secao-badge" style="background:${bgLight};color:${cor};border:1px solid ${borderLight}">${badge}</span></div><div class="secao-body">${innerHtml}</div></div>`;
 }
 
-function abrirForm(tipo, inputId) {
-  formAtivo = tipo;
-  renderAba();
-  setTimeout(()=>document.getElementById(inputId)?.focus(),100);
+// Copiar lista para WhatsApp
+function copiarLista() {
+  const s=dados?.semanaAtual; if(!s) return;
+  let txt=`⚽ *ASTTI FC — ${s.data}*\n\n`;
+  txt+=`*🥅 Goleiros*\n`;
+  s.goleiros.forEach((g,i)=>{ txt+=`GL${i+1} ${g.nome||"—"}${g.churrasco?" 🍖":""}\n`; });
+  txt+=`\n*📋 Jogadores*\n`;
+  s.jogadores.forEach(j=>{ txt+=`${j.id}. ${j.nome||"—"}${j.churrasco?" 🍖":""}\n`; });
+  txt+=`\n*⏳ Lista de Espera*\n`;
+  if(s.espera?.length>0){ s.espera.forEach((e,i)=>{ txt+=`${i+1}º ${e.nome}${e.churrasco?" 🍖":""}\n`; }); }
+  else { txt+=`Nenhum jogador na espera\n`; }
+  txt+=`\n*❌ Ausentes*\n`;
+  if(s.ausentes?.length>0){ s.ausentes.forEach(a=>{ txt+=`• ${a.nome}${a.motivo?" ("+a.motivo+")":""}\n`; }); }
+  else { txt+=`Nenhuma ausência registrada\n`; }
+  txt+=`\n⚽ _Ainda não está na lista? Corre que ainda tem vaga!_\n👉 https://offsideincodebiano.github.io/Futsal-Astti`;
+  navigator.clipboard?.writeText(txt).then(()=>toast("✅ Lista copiada!")).catch(()=>toast("Erro ao copiar","erro"));
 }
 
-function cancelarForm() { formAtivo=null; renderAba(); }
-
-async function confirmarGoleiro(idx) {
-  const nome = document.getElementById(`fg-nome-${idx}`)?.value?.trim();
-  const ch = document.getElementById(`fg-ch-${idx}`)?.checked||false;
-  if (!nome) { toast("Digite seu nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.goleiros[idx] = {...d.semanaAtual.goleiros[idx], nome, churrasco:ch};
-  await gravarBin(d); formAtivo=null; renderAba(); toast(nome+" entrou como goleiro! ⚽");
+function abrirModalEntrada(tipo,idx) {
+  if(!dados?.semanaAtual){toast("Aguarde, carregando...","info");return;}
+  entradaTipo=tipo; entradaIdx=idx;
+  const titulo=tipo==="goleiro"?`Entrar como Goleiro GL${idx+1}`:`Entrar na vaga ${dados.semanaAtual.jogadores[idx].id}`;
+  document.getElementById("entrada-titulo").textContent=titulo;
+  document.getElementById("entrada-nome").value="";
+  document.getElementById("entrada-ch").checked=false;
+  document.getElementById("autocomplete-list").style.display="none";
+  document.getElementById("entrada-confirmar").onclick=confirmarEntrada;
+  abrirModal("overlay-entrada");
+  setTimeout(()=>document.getElementById("entrada-nome").focus(),300);
 }
 
-async function confirmarJogador(idx) {
-  const nome = document.getElementById(`fj-nome-${idx}`)?.value?.trim();
-  const ch = document.getElementById(`fj-ch-${idx}`)?.checked||false;
-  if (!nome) { toast("Digite seu nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.jogadores[idx] = {...d.semanaAtual.jogadores[idx], nome, churrasco:ch};
-  await gravarBin(d); formAtivo=null; renderAba(); toast(nome+" entrou na lista! ⚽");
+function filtrarMensalistas() {
+  const val=document.getElementById("entrada-nome").value.trim().toLowerCase();
+  const lista=document.getElementById("autocomplete-list");
+  const mens=getNomesMensalistas();
+  const filtrados=mens.filter(n=>n.toLowerCase().includes(val));
+  if(filtrados.length===0){lista.style.display="none";return;}
+  lista.innerHTML=filtrados.map(n=>`<div class="autocomplete-item mensalista" onclick="selecionarNome('entrada-nome','autocomplete-list','${n}')">${n}<span class="autocomplete-badge">Mensalista</span></div>`).join("");
+  lista.style.display="block";
+}
+
+function filtrarMensalistasEspera() {
+  const val=document.getElementById("em-nome").value.trim().toLowerCase();
+  const lista=document.getElementById("autocomplete-list-espera");
+  const mens=getNomesMensalistas();
+  const filtrados=mens.filter(n=>n.toLowerCase().includes(val));
+  if(filtrados.length===0){lista.style.display="none";return;}
+  lista.innerHTML=filtrados.map(n=>`<div class="autocomplete-item mensalista" onclick="selecionarNome('em-nome','autocomplete-list-espera','${n}')">${n}<span class="autocomplete-badge">Mensalista</span></div>`).join("");
+  lista.style.display="block";
+}
+
+function selecionarNome(inputId,listaId,nome) {
+  document.getElementById(inputId).value=nome;
+  document.getElementById(listaId).style.display="none";
+}
+
+async function confirmarEntrada() {
+  const nome=document.getElementById("entrada-nome").value.trim();
+  const ch=document.getElementById("entrada-ch").checked;
+  if(!nome){toast("Digite seu nome","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  const ehMensalista=getNomesMensalistas().includes(nome);
+  if(entradaTipo==="goleiro") {
+    d.semanaAtual.goleiros[entradaIdx]={...d.semanaAtual.goleiros[entradaIdx],nome,churrasco:ch};
+    await gravarBin(d);fecharModal("overlay-entrada");renderAba();toast(nome+" entrou como goleiro! ⚽");
+  } else {
+    d.semanaAtual.jogadores[entradaIdx]={...d.semanaAtual.jogadores[entradaIdx],nome,churrasco:ch,avulso:!ehMensalista,avulsoPago:false};
+    await gravarBin(d);fecharModal("overlay-entrada");renderAba();toast(nome+" entrou na lista! ⚽");
+  }
+}
+
+async function toggleAvulsoPago(idx) {
+  const d=JSON.parse(JSON.stringify(dados));
+  const j=d.semanaAtual.jogadores[idx];
+  const pagando=!j.avulsoPago;
+  d.semanaAtual.jogadores[idx].avulsoPago=pagando;
+  if(pagando) {
+    const valor=d.mensalistas?.valorAvulso||25;
+    d.caixa.movimentacoes.push({id:"mov"+Date.now(),tipo:"entrada",desc:`Avulso — ${j.nome}`,valor,data:new Date().toLocaleDateString("pt-BR"),origem:"avulso"});
+    toast("✅ Pagamento registrado! R$ "+valor+" no caixa.");
+  } else {
+    // Remove a movimentação de avulso mais recente desse jogador
+    const idx2=d.caixa.movimentacoes.findLastIndex(m=>m.origem==="avulso"&&m.desc.includes(j.nome));
+    if(idx2>=0) d.caixa.movimentacoes.splice(idx2,1);
+    toast("Pagamento revertido.","info");
+  }
+  await gravarBin(d);renderAba();
+}
+
+function abrirModalEspera() {
+  if(!dados?.semanaAtual){toast("Aguarde, carregando...","info");return;}
+  document.getElementById("em-nome").value="";
+  document.getElementById("em-ch").checked=false;
+  document.getElementById("autocomplete-list-espera").style.display="none";
+  abrirModal("overlay-espera-modal");
+  setTimeout(()=>document.getElementById("em-nome").focus(),300);
+}
+
+async function confirmarEsperaModal() {
+  const nome=document.getElementById("em-nome").value.trim();
+  const ch=document.getElementById("em-ch").checked;
+  if(!nome){toast("Digite seu nome","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.espera.push({id:"e"+Date.now(),nome,churrasco:ch});
+  await gravarBin(d);fecharModal("overlay-espera-modal");renderAba();toast(nome+" entrou na lista de espera!");
+}
+
+async function confirmarAusenteModal() {
+  const nome=document.getElementById("am-nome").value.trim();
+  const motivo=document.getElementById("am-motivo").value.trim();
+  const ch=document.getElementById("am-ch").checked;
+  if(!nome){toast("Digite o nome","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.ausentes.push({id:"a"+Date.now(),nome,motivo,churrasco:ch});
+  await gravarBin(d);fecharModal("overlay-ausente-modal");renderAba();toast("Ausência registrada!");
 }
 
 async function removerGoleiro(idx) {
-  if (!confirm("Remover " + dados.semanaAtual.goleiros[idx].nome + " da lista?")) return;
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.goleiros[idx] = { ...d.semanaAtual.goleiros[idx], nome:"", churrasco:false };
-  await gravarBin(d); renderAba(); toast("Vaga liberada.");
+  if(!confirm("Remover "+dados.semanaAtual.goleiros[idx].nome+"?"))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.goleiros[idx]={...d.semanaAtual.goleiros[idx],nome:"",churrasco:false};
+  await gravarBin(d);renderAba();toast("Vaga liberada.");
 }
 
 async function removerJogador(idx) {
-  if (!confirm("Remover " + dados.semanaAtual.jogadores[idx].nome + " da lista?")) return;
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.jogadores[idx] = { ...d.semanaAtual.jogadores[idx], nome:"", churrasco:false };
-  await gravarBin(d); renderAba(); toast("Vaga liberada.");
+  if(!confirm("Remover "+dados.semanaAtual.jogadores[idx].nome+"?"))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.jogadores[idx]={...d.semanaAtual.jogadores[idx],nome:"",churrasco:false,avulso:false,avulsoPago:false};
+  await gravarBin(d);renderAba();toast("Vaga liberada.");
 }
 
 async function adicionarVaga() {
-  const d = JSON.parse(JSON.stringify(dados));
-  const prox = d.semanaAtual.jogadores.length + 1;
-  d.semanaAtual.jogadores.push({id:prox, nome:"", churrasco:false});
-  await gravarBin(d); renderAba(); toast("Vaga "+prox+" adicionada!");
+  const d=JSON.parse(JSON.stringify(dados));
+  const prox=d.semanaAtual.jogadores.length+1;
+  d.semanaAtual.jogadores.push({id:prox,nome:"",churrasco:false,avulso:false,avulsoPago:false});
+  await gravarBin(d);renderAba();toast("Vaga "+prox+" adicionada!");
 }
 
-async function confirmarAusente() {
-  const nome = document.getElementById("fa-nome")?.value?.trim();
-  const motivo = document.getElementById("fa-motivo")?.value?.trim()||"";
-  const ch = document.getElementById("fa-ch")?.checked||false;
-  if (!nome) { toast("Digite o nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.ausentes.push({id:"a"+Date.now(),nome,motivo,churrasco:ch});
-  await gravarBin(d); formAtivo=null; renderAba(); toast("Ausência registrada!");
-}
-
-async function toggleChurrasco(tipo, idx) {
-  const d = JSON.parse(JSON.stringify(dados));
-  if (tipo==="goleiro") d.semanaAtual.goleiros[idx].churrasco = !d.semanaAtual.goleiros[idx].churrasco;
-  if (tipo==="jogador") d.semanaAtual.jogadores[idx].churrasco = !d.semanaAtual.jogadores[idx].churrasco;
-  await gravarBin(d); renderAba();
+async function toggleChurrasco(tipo,idx) {
+  const d=JSON.parse(JSON.stringify(dados));
+  if(tipo==="goleiro") d.semanaAtual.goleiros[idx].churrasco=!d.semanaAtual.goleiros[idx].churrasco;
+  if(tipo==="jogador") d.semanaAtual.jogadores[idx].churrasco=!d.semanaAtual.jogadores[idx].churrasco;
+  await gravarBin(d);renderAba();
 }
 
 // ── CHURRASCO ─────────────────────────────────────────────────────────────────
 function getParticipantesChurrasco(s) {
-  return [
-    ...s.goleiros.filter(g=>g.nome&&g.churrasco),
-    ...s.jogadores.filter(j=>j.nome&&j.churrasco),
-    ...(s.espera||[]).filter(e=>e.churrasco),
-    ...(s.ausentes||[]).filter(a=>a.nome&&a.churrasco),
-  ];
+  return [...s.goleiros.filter(g=>g.nome&&g.churrasco),...s.jogadores.filter(j=>j.nome&&j.churrasco),...(s.espera||[]).filter(e=>e.churrasco),...(s.ausentes||[]).filter(a=>a.nome&&a.churrasco)];
 }
 
 function renderChurrasco(s) {
-  const ch = s.churrasco; const participantes = getParticipantesChurrasco(s);
-  if (!ch.confirmado) return `<div class="placeholder">
-    <div style="font-size:48px;margin-bottom:12px">🍖</div>
-    <p style="color:#bbb;font-size:14px;margin-bottom:24px">Churrasco não confirmado para esta semana.</p>
-    ${isAdmin?`<button class="btn-principal" onclick="abrirChurrascoCfg()">+ Configurar churrasco</button>`:""}
-  </div>`;
+  const ch=s.churrasco; const participantes=getParticipantesChurrasco(s);
+  if(!ch.confirmado) return `<div class="placeholder"><div style="font-size:48px;margin-bottom:12px">🍖</div><p style="color:#bbb;font-size:14px;margin-bottom:24px">Churrasco não confirmado para esta semana.</p>${isAdmin?`<button class="btn-principal" onclick="abrirChurrascoCfg()">+ Configurar churrasco</button>`:""}</div>`;
 
-  const valorBase = participantes.length>0&&ch.valorTotal>0 ? parseFloat(ch.valorTotal)/participantes.length : 0;
-  function calcTotal(nome){ const ex=(ch.extras||[]).find(e=>e.nome===nome); return valorBase+(ex?parseFloat(ex.valor):0); }
-  const pagos = participantes.filter(p=>(ch.pagos||[]).includes(p.nome));
-  const pendentes = participantes.filter(p=>!(ch.pagos||[]).includes(p.nome));
-  const totalPago = pagos.reduce((a,p)=>a+calcTotal(p.nome),0);
-  const totalPend = pendentes.reduce((a,p)=>a+calcTotal(p.nome),0);
-  const pct = participantes.length?(pagos.length/participantes.length)*100:0;
+  const valorBase=participantes.length>0&&ch.valorTotal>0?parseFloat(ch.valorTotal)/participantes.length:0;
+  function calcTotal(nome){const ex=(ch.extras||[]).find(e=>e.nome===nome);return valorBase+(ex?parseFloat(ex.valor):0);}
+  const pagos=participantes.filter(p=>(ch.pagos||[]).includes(p.nome));
+  const pendentes=participantes.filter(p=>!(ch.pagos||[]).includes(p.nome));
+  const totalPago=pagos.reduce((a,p)=>a+calcTotal(p.nome),0);
+  const totalPend=pendentes.reduce((a,p)=>a+calcTotal(p.nome),0);
+  const pct=participantes.length?(pagos.length/participantes.length)*100:0;
 
-  let html = `<div class="churrasco-status">
+  let html=`<div class="churrasco-status">
     <div style="display:flex;align-items:center;gap:10px">
       <span style="font-size:32px">🍖</span>
       <div><div style="font-weight:800;font-size:16px;color:#fff">Churrasco confirmado!</div><div style="font-size:12px;color:#a8d4b4;margin-top:2px">${s.data}</div></div>
@@ -614,7 +733,6 @@ function renderChurrasco(s) {
     </div>
     ${isAdmin?`<button class="btn-small" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);margin-top:12px;width:100%;padding:10px" onclick="abrirChurrascoCfg()">✏️ Editar configuração</button>`:""}
   </div>
-
   <div class="pix-card">
     <div class="pix-row">
       <div><div class="pix-label">Responsável</div><div class="pix-valor">${ch.responsavel}</div></div>
@@ -626,10 +744,9 @@ function renderChurrasco(s) {
     <button class="btn-pix" id="btn-pix" onclick="copiarPix('${ch.pixChave}')">📲 Copiar chave Pix</button>
   </div>`;
 
-  html += `<div class="secao"><div class="secao-header"><span class="secao-titulo">RATEIO</span><span class="secao-badge" style="background:#fff8f0;color:#c85000;border:1px solid #e8c0a0">${participantes.length} pessoas</span></div><div class="secao-body">
+  html+=`<div class="secao"><div class="secao-header"><span class="secao-titulo">RATEIO</span><span class="secao-badge" style="background:#fff8f0;color:#c85000;border:1px solid #e8c0a0">${participantes.length} pessoas</span></div><div class="secao-body">
     <div style="padding:4px 0 8px;color:#aaa;font-size:11px;text-align:center">Valor base: <strong style="color:#c85000">R$ ${valorBase.toFixed(2)}</strong> por pessoa</div>
     <div class="th-row"><span style="flex:1">Nome</span><span style="width:52px;text-align:right">Extra</span><span style="width:72px;text-align:right">Total</span>${isAdmin?'<span style="width:44px;text-align:center">Pago</span>':''}</div>`;
-
   participantes.forEach(p=>{
     const ex=(ch.extras||[]).find(e=>e.nome===p.nome);
     const total=calcTotal(p.nome); const pago=(ch.pagos||[]).includes(p.nome);
@@ -644,17 +761,15 @@ function renderChurrasco(s) {
 
   html+=`<div class="secao"><div class="secao-header"><span class="secao-titulo">ITENS EXTRAS</span><span class="secao-badge" style="background:#fff8f0;color:#c85000;border:1px solid #e8c0a0">${(ch.extras||[]).length}</span></div><div class="secao-body">`;
   (ch.extras||[]).forEach((e,ei)=>{
-    html+=`<div class="linha-extra">
-      <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#1a1a1a">${e.nome}</div><div style="font-size:11px;color:#bbb;margin-top:1px">${e.descricao}</div></div>
-      <span style="font-size:13px;font-weight:700;color:#c85000;margin-right:8px">+R$ ${parseFloat(e.valor).toFixed(2)}</span>
-      ${isAdmin?`<button onclick="removerExtra(${ei})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>`:""}
+    html+=`<div class="linha-extra"><div style="flex:1"><div style="font-size:13px;font-weight:600;color:#1a1a1a">${e.nome}</div><div style="font-size:11px;color:#bbb;margin-top:1px">${e.descricao}</div></div>
+    <span style="font-size:13px;font-weight:700;color:#c85000;margin-right:8px">+R$ ${parseFloat(e.valor).toFixed(2)}</span>
+    ${isAdmin?`<button onclick="removerExtra(${ei})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>`:""}
     </div>`;
   });
-  if (isAdmin) html+=`<button class="btn-add-vaga" style="border-color:#e8c0a0;color:#c85000;background:#fff8f0;margin-top:4px" onclick="abrirExtra()">+ Adicionar item extra</button>`;
+  if(isAdmin) html+=`<button class="btn-add-vaga" style="border-color:#e8c0a0;color:#c85000;background:#fff8f0;margin-top:4px" onclick="abrirExtra()">+ Adicionar item extra</button>`;
   html+=`</div></div>`;
 
-  html+=`<div class="totalizador">
-    <div class="tot-titulo">RESUMO DE PAGAMENTOS</div>
+  html+=`<div class="totalizador"><div class="tot-titulo">RESUMO DE PAGAMENTOS</div>
     <div class="tot-row">
       <div class="tot-card pago"><div style="font-size:10px;color:#1a7a3e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">✅ Pagos</div><div style="font-size:24px;font-weight:900;color:#1a7a3e;line-height:1">${pagos.length}</div><div style="font-size:12px;color:#4a9a6a;margin-top:4px;font-weight:600">R$ ${totalPago.toFixed(2)}</div></div>
       <div class="tot-card pendente"><div style="font-size:10px;color:#c0392b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">❌ Pendentes</div><div style="font-size:24px;font-weight:900;color:#c0392b;line-height:1">${pendentes.length}</div><div style="font-size:12px;color:#a06060;margin-top:4px;font-weight:600">R$ ${totalPend.toFixed(2)}</div></div>
@@ -665,13 +780,13 @@ function renderChurrasco(s) {
   return html;
 }
 
-function copiarPix(chave) {
+function copiarPix(chave){
   navigator.clipboard?.writeText(chave);
   const btn=document.getElementById("btn-pix");
   if(btn){btn.textContent="✅ Chave copiada!";btn.style.background="#e8f5ee";setTimeout(()=>{btn.textContent="📲 Copiar chave Pix";btn.style.background="#f0faf4";},2000);}
 }
 
-function abrirChurrascoCfg() {
+function abrirChurrascoCfg(){
   const ch=dados?.semanaAtual?.churrasco||{};
   document.getElementById("ch-responsavel").value=ch.responsavel||"";
   document.getElementById("ch-valor").value=ch.valorTotal||"";
@@ -680,7 +795,7 @@ function abrirChurrascoCfg() {
   abrirModal("overlay-churrasco-cfg");
 }
 
-async function salvarChurrascoCfg() {
+async function salvarChurrascoCfg(){
   const responsavel=document.getElementById("ch-responsavel").value.trim();
   const valorTotal=document.getElementById("ch-valor").value;
   const pixChave=document.getElementById("ch-pix").value.trim();
@@ -691,7 +806,7 @@ async function salvarChurrascoCfg() {
   await gravarBin(d);fecharModal("overlay-churrasco-cfg");renderAba();toast("✅ Churrasco configurado!");
 }
 
-function abrirExtra() {
+function abrirExtra(){
   const participantes=getParticipantesChurrasco(dados.semanaAtual);
   const sel=document.getElementById("extra-nome");
   sel.innerHTML='<option value="">Selecionar...</option>'+participantes.map(p=>`<option value="${p.nome}">${p.nome}</option>`).join("");
@@ -699,7 +814,7 @@ function abrirExtra() {
   abrirModal("overlay-extra");
 }
 
-async function salvarExtra() {
+async function salvarExtra(){
   const nome=document.getElementById("extra-nome").value;
   const valor=document.getElementById("extra-valor").value;
   const descricao=document.getElementById("extra-desc").value.trim();
@@ -709,46 +824,323 @@ async function salvarExtra() {
   await gravarBin(d);fecharModal("overlay-extra");renderAba();toast("Extra adicionado!");
 }
 
-async function removerExtra(idx) {
-  const extra = dados.semanaAtual.churrasco.extras[idx];
-  if (!confirm("Remover item extra de " + extra.nome + "?")) return;
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.churrasco.extras.splice(idx, 1);
-  await gravarBin(d); renderAba(); toast("Item extra removido.");
+async function removerExtra(idx){
+  const extra=dados.semanaAtual.churrasco.extras[idx];
+  if(!confirm("Remover item extra de "+extra.nome+"?"))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.churrasco.extras.splice(idx,1);
+  await gravarBin(d);renderAba();toast("Item extra removido.");
 }
 
-async function togglePago(nome) {
+async function togglePago(nome){
   const d=JSON.parse(JSON.stringify(dados));
   const pagos=d.semanaAtual.churrasco.pagos||[];
   d.semanaAtual.churrasco.pagos=pagos.includes(nome)?pagos.filter(p=>p!==nome):[...pagos,nome];
   await gravarBin(d);renderAba();
 }
 
+// ── MENSALISTAS ───────────────────────────────────────────────────────────────
+function renderMensalistas() {
+  const m=dados.mensalistas||{};
+  const membros=m.membros||[];
+  const valorBase=parseFloat(m.valorBase||80);
+  const valorAvulso=parseFloat(m.valorAvulso||25);
+  const rateio=membros.length>0?(valorBase/membros.length).toFixed(2):valorBase.toFixed(2);
+  const pagos=membros.filter(x=>x.pago).length;
+  const totalArrecadado=membros.filter(x=>x.pago).reduce((a)=>a+parseFloat(rateio),0);
+  const jaSouMembro=membros.find(x=>x.uid===uid);
+
+  let html=`<div class="mens-card">
+    <div style="text-align:center">
+      <p style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Mensalidade</p>
+      <p style="font-size:13px;color:#a8c4e0;font-weight:600;margin-bottom:12px">${m.mes||mesAtual()}</p>
+      <div style="font-size:40px;font-weight:900;color:#fff;line-height:1">R$ ${rateio}</div>
+      <p style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px">por mensalista · base R$ ${valorBase.toFixed(2)}</p>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:#6ee895">${pagos}</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:2px">Pagaram</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:#fff">${membros.length}</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:2px">Membros</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:16px;font-weight:800;color:#f5c518">R$${totalArrecadado.toFixed(0)}</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:2px">Arrecadado</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  // Botão entrar como mensalista
+  if(!jaSouMembro) {
+    html+=`<button class="btn-principal" onclick="abrirModalMensalista()" style="margin-bottom:14px">👥 Entrar como mensalista este mês</button>`;
+  } else {
+    const meuStatus=jaSouMembro.pago;
+    html+=`<div style="background:${meuStatus?"#f0faf4":"#fff8f8"};border:1px solid ${meuStatus?"#b0ddc0":"#e8b0b0"};border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:24px">${meuStatus?"✅":"⏳"}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:${meuStatus?"#1a7a3e":"#c0392b"}">${meuStatus?"Você está em dia!":"Pagamento pendente"}</div>
+          <div style="font-size:11px;color:#aaa;margin-top:2px">Mensalista de ${m.mes||mesAtual()}</div>
+        </div>
+        ${!meuStatus?`<button class="btn-small" style="background:#1a7a3e;color:#fff;padding:10px 14px" onclick="confirmarPagamentoMensalista()">Paguei ✅</button>`:""}
+      </div>
+      ${meuStatus?`<button onclick="desfazerPagamentoMensalista()" style="background:none;border:none;color:#aaa;font-size:11px;cursor:pointer;font-family:inherit;margin-top:8px;text-decoration:underline;padding:0">↩️ Desfazer pagamento</button>`:""}
+    </div>`;
+  }
+
+  // Lista de membros
+  const thMens=`<div class="th-row"><span style="flex:1">Nome</span><span style="width:80px;text-align:center">Situação</span><span style="width:55px;text-align:right">Valor</span></div>`;
+  let mRows=membros.length>0
+    ?membros.map((x,xi)=>{
+        const meuEste=x.uid===uid;
+        return `<div class="linha-mens">
+          <span class="nome-linha">${x.nome}</span>
+          <button onclick="togglePagoMensalista(${xi})" style="width:80px;text-align:center;font-size:11px;font-weight:600;color:${x.pago?"#1a7a3e":"#c0392b"};background:${x.pago?"#f0faf4":"#fff5f5"};border:1px solid ${x.pago?"#b0ddc0":"#e8b0b0"};border-radius:8px;padding:4px 6px;cursor:pointer;font-family:inherit;flex-shrink:0">${x.pago?"✅ Pago":"⏳ Pend."}</button>
+          <span style="width:55px;text-align:right;font-size:12px;font-weight:700;color:#1a1a1a">R$${rateio}</span>
+          ${(meuEste||isAdmin)?`<button onclick="removerMensalista(${xi})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 6px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:4px;flex-shrink:0">✕</button>`:""}
+        </div>`;
+      }).join("")
+    :`<p style="font-size:12px;color:#ccc;text-align:center;padding:12px;font-style:italic">Nenhum mensalista este mês</p>`;
+
+  if(isAdmin) mRows+=`<button class="btn-add-vaga" style="border-color:#c0cce8;color:#1a3a6a;background:#eef2fa;margin-top:4px" onclick="abrirModalAdmMensalista()">+ Adicionar mensalista (ADM)</button>`;
+
+  html+=secaoHtml("MENSALISTAS DO MÊS",`${membros.length} membros`,"#1a3a6a","#eef2fa","#c0cce8",thMens+mRows);
+
+  // Botão copiar mensalistas
+  html+=`<button class="btn-copiar" onclick="copiarMensalistas()" style="margin-top:4px">📋 Copiar lista de mensalistas</button>`;
+  if(isAdmin) html+=`<button class="btn-add-vaga" style="border-color:#c0cce8;color:#1a3a6a;background:#eef2fa;margin-top:8px" onclick="abrirModal('overlay-mens-cfg')">⚙️ Configurar valores</button>`;
+  return html;
+}
+
+function abrirModalMensalista(){
+  abrirModal("overlay-mens-nome");
+}
+
+// Modal inline para nome do mensalista
+document.addEventListener("DOMContentLoaded",()=>{
+  const div=document.createElement("div");
+  div.className="overlay"; div.id="overlay-mens-nome";
+  div.innerHTML=`<div class="modal">
+    <div class="modal-header"><span class="modal-titulo">👥 Entrar como Mensalista</span><button class="btn-fechar" onclick="fecharModal('overlay-mens-nome')">✕</button></div>
+    <p style="color:#888;font-size:13px;margin-bottom:16px;line-height:1.5">Você será incluído na lista de mensalistas deste mês. O valor será recalculado automaticamente.</p>
+    <label class="label">Seu nome</label>
+    <input class="input" id="mens-nome" placeholder="Digite seu nome" autocomplete="off" style="margin-bottom:18px"/>
+    <button class="btn-block" style="background:#1a3a6a;color:#fff" onclick="confirmarMensalista()">Confirmar</button>
+    <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-mens-nome')">Cancelar</button>
+  </div>`;
+  div.addEventListener("click",e=>{if(e.target===div)div.classList.remove("ativo");});
+  document.body.appendChild(div);
+});
+
+async function confirmarMensalista(){
+  const nome=document.getElementById("mens-nome")?.value?.trim();
+  if(!nome){toast("Digite seu nome","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  if(!d.mensalistas)d.mensalistas={mes:mesAtual(),valorBase:80,valorAvulso:25,membros:[]};
+  // Se não for ADM, verifica UID duplicado
+  if(!isAdmin && d.mensalistas.membros.find(x=>x.uid===uid)){
+    toast("Você já é mensalista este mês!","info");return;
+  }
+  d.mensalistas.membros.push({nome,pago:false,uid:isAdmin?"adm_"+Date.now():uid,dataEntrada:new Date().toLocaleDateString("pt-BR")});
+  await gravarBin(d);fecharModal("overlay-mens-nome");renderAba();toast("✅ "+nome+" adicionado como mensalista!");
+}
+
+async function togglePagoMensalista(idx){
+  const d=JSON.parse(JSON.stringify(dados));
+  const membro=d.mensalistas.membros[idx];
+  const pagando=!membro.pago;
+  d.mensalistas.membros[idx].pago=pagando;
+  const rateio=d.mensalistas.membros.length>0?parseFloat(d.mensalistas.valorBase)/d.mensalistas.membros.length:parseFloat(d.mensalistas.valorBase);
+  if(pagando){
+    d.caixa.movimentacoes.push({id:"mov"+Date.now(),tipo:"entrada",desc:`Mensalidade — ${membro.nome}`,valor:parseFloat(rateio.toFixed(2)),data:new Date().toLocaleDateString("pt-BR"),origem:"mensalidade"});
+    toast("✅ "+membro.nome+" marcado como pago!");
+  } else {
+    const ci=d.caixa.movimentacoes.findLastIndex(m=>m.origem==="mensalidade"&&m.desc.includes(membro.nome));
+    if(ci>=0)d.caixa.movimentacoes.splice(ci,1);
+    toast("Pagamento de "+membro.nome+" desfeito.","info");
+  }
+  await gravarBin(d);renderAba();
+}
+
+async function desfazerPagamentoMensalista(){
+  if(!confirm("Desfazer pagamento? O valor será removido do caixa."))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  const idx=d.mensalistas.membros.findIndex(x=>x.uid===uid);
+  if(idx<0)return;
+  d.mensalistas.membros[idx].pago=false;
+  const ci=d.caixa.movimentacoes.findLastIndex(m=>m.origem==="mensalidade"&&m.desc.includes(d.mensalistas.membros[idx].nome));
+  if(ci>=0)d.caixa.movimentacoes.splice(ci,1);
+  await gravarBin(d);renderAba();toast("Pagamento desfeito.","info");
+}
+
+async function confirmarPagamentoMensalista(){
+  const d=JSON.parse(JSON.stringify(dados));
+  const idx=d.mensalistas.membros.findIndex(x=>x.uid===uid);
+  if(idx<0)return;
+  d.mensalistas.membros[idx].pago=true;
+  const rateio=d.mensalistas.membros.length>0?parseFloat(d.mensalistas.valorBase)/d.mensalistas.membros.length:parseFloat(d.mensalistas.valorBase);
+  d.caixa.movimentacoes.push({id:"mov"+Date.now(),tipo:"entrada",desc:`Mensalidade — ${d.mensalistas.membros[idx].nome}`,valor:parseFloat(rateio.toFixed(2)),data:new Date().toLocaleDateString("pt-BR"),origem:"mensalidade"});
+  await gravarBin(d);renderAba();toast("✅ Pagamento confirmado! R$ "+rateio.toFixed(2)+" no caixa.");
+}
+
+async function removerMensalista(idx){
+  const membro=dados.mensalistas.membros[idx];
+  if(!confirm("Remover "+membro.nome+" da lista de mensalistas?"))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  // Remove entrada no caixa se já pagou
+  if(membro.pago){
+    const ci=d.caixa.movimentacoes.findLastIndex(m=>m.origem==="mensalidade"&&m.desc.includes(membro.nome));
+    if(ci>=0)d.caixa.movimentacoes.splice(ci,1);
+  }
+  d.mensalistas.membros.splice(idx,1);
+  await gravarBin(d);renderAba();toast(membro.nome+" removido dos mensalistas.");
+}
+
+function copiarMensalistas(){
+  const m=dados?.mensalistas; if(!m) return;
+  const membros=m.membros||[];
+  let txt=`👥 *ASTTI FC — Mensalistas*\n`;
+  txt+=`📅 ${m.mes||mesAtual()}\n\n`;
+  if(membros.length>0){
+    membros.forEach((x,i)=>{ txt+=`${i+1}. ${x.nome} — ${x.pago?"✅ Pago":"⏳ Pendente"}\n`; });
+  } else { txt+=`Nenhum mensalista cadastrado ainda.\n`; }
+  txt+=`\n👥 _Quer garantir sua vaga todo mês? Entre como mensalista!_\n👉 https://offsideincodebiano.github.io/Futsal-Astti`;
+  navigator.clipboard?.writeText(txt).then(()=>toast("✅ Lista de mensalistas copiada!")).catch(()=>toast("Erro ao copiar","erro"));
+}
+
+function abrirModalAdmMensalista(){
+  // Reutiliza o modal de nome do mensalista
+  document.getElementById("mens-nome").value="";
+  abrirModal("overlay-mens-nome");
+}
+
+async function editarNomeSemana(){
+  const atual=dados?.semanaAtual?.data||"";
+  const novo=window.prompt("Nome da semana (ex: Segunda-feira, 07/07):",atual);
+  if(novo===null||!novo.trim())return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.semanaAtual.data=novo.trim();
+  d.semanaAtual.dataPartida="";
+  await gravarBin(d);renderAba();toast("✅ Nome da semana atualizado!");
+}
+
+async function limparHistorico(){
+  if(!confirm("Limpar todo o histórico de semanas anteriores? Esta ação não pode ser desfeita."))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.historico=[];
+  await gravarBin(d);fecharModal("overlay-admmenu");toast("✅ Histórico limpo!");
+}
+
+async function salvarMensCfg(){
+  const valorBase=document.getElementById("mens-base").value;
+  const valorAvulso=document.getElementById("mens-avulso").value;
+  if(!valorBase||!valorAvulso){toast("Preencha os valores","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  d.mensalistas.valorBase=parseFloat(valorBase);
+  d.mensalistas.valorAvulso=parseFloat(valorAvulso);
+  await gravarBin(d);fecharModal("overlay-mens-cfg");renderAba();toast("✅ Valores configurados!");
+}
+
+// ── CAIXA ─────────────────────────────────────────────────────────────────────
+function renderCaixa(){
+  const movs=(dados.caixa?.movimentacoes||[]).slice().reverse();
+  const saldo=movs.slice().reverse().reduce((a,m)=>m.tipo==="entrada"?a+m.valor:a-m.valor,0);
+  const totalEntradas=movs.filter(m=>m.tipo==="entrada").reduce((a,m)=>a+m.valor,0);
+  const totalSaidas=movs.filter(m=>m.tipo==="saida").reduce((a,m)=>a+m.valor,0);
+
+  let html=`<div class="saldo-card">
+    <p style="font-size:11px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Saldo atual</p>
+    <div style="font-size:48px;font-weight:900;color:${saldo>=0?"#6ee895":"#ff8080"};line-height:1">R$ ${saldo.toFixed(2)}</div>
+    <div style="display:flex;gap:16px;margin-top:16px;justify-content:center">
+      <div style="text-align:center"><div style="font-size:14px;font-weight:700;color:#6ee895">+R$ ${totalEntradas.toFixed(2)}</div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:2px">Entradas</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+      <div style="text-align:center"><div style="font-size:14px;font-weight:700;color:#ff8080">-R$ ${totalSaidas.toFixed(2)}</div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:2px">Saídas</div></div>
+    </div>
+  </div>`;
+
+  // Botões de ação
+  html+=`<div style="display:flex;gap:8px;margin-bottom:14px">
+    <button class="btn-block" style="background:#f0faf4;color:#1a7a3e;border:1px solid #b0ddc0;flex:1;margin-bottom:0" onclick="abrirMovimentacao('entrada')">+ Entrada</button>
+    <button class="btn-block" style="background:#fff5f5;color:#c0392b;border:1px solid #e8b0b0;flex:1;margin-bottom:0" onclick="abrirMovimentacao('saida')">- Saída</button>
+  </div>`;
+
+  // Extrato
+  html+=`<div class="secao"><div class="secao-header"><span class="secao-titulo">EXTRATO</span><span class="secao-badge" style="background:#eef2fa;color:#1a3a6a;border:1px solid #c0cce8">${movs.length} movimentações</span></div><div class="secao-body">`;
+  if(movs.length===0){
+    html+=`<p style="font-size:12px;color:#ccc;text-align:center;padding:20px;font-style:italic">Nenhuma movimentação ainda</p>`;
+  } else {
+    movs.forEach((m,mi)=>{
+      const entrada=m.tipo==="entrada";
+      const idxReal=movs.length-1-mi; // índice real no array original (que está invertido)
+      html+=`<div class="linha-mov">
+        <div class="mov-tipo ${entrada?"entrada":"saida"}">${entrada?"⬆️":"⬇️"}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:#1a1a1a">${m.desc}</div>
+          <div style="font-size:10px;color:#aaa;margin-top:1px">${m.data}</div>
+        </div>
+        <span style="font-size:14px;font-weight:700;color:${entrada?"#1a7a3e":"#c0392b"};margin-right:${isAdmin?"8px":"0"}">${entrada?"+":"-"}R$ ${parseFloat(m.valor).toFixed(2)}</span>
+        ${isAdmin?`<button onclick="removerMovimentacao(${idxReal})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>`:""}
+      </div>`;
+    });
+  }
+  html+=`</div></div>`;
+  return html;
+}
+
+async function removerMovimentacao(idx){
+  const mov=dados.caixa.movimentacoes[idx];
+  if(!confirm(`Remover "${mov.desc}" (${mov.tipo==="entrada"?"+":"-"}R$ ${parseFloat(mov.valor).toFixed(2)})?`))return;
+  const d=JSON.parse(JSON.stringify(dados));
+  d.caixa.movimentacoes.splice(idx,1);
+  await gravarBin(d);renderAba();toast("Movimentação removida.","info");
+}
+
+function abrirMovimentacao(tipo){
+  document.getElementById("mov-titulo").textContent=tipo==="entrada"?"➕ Nova Entrada":"➖ Nova Saída";
+  document.getElementById("mov-desc").value="";
+  document.getElementById("mov-valor").value="";
+  document.getElementById("mov-confirmar").style.background=tipo==="entrada"?"#1a7a3e":"#c0392b";
+  document.getElementById("mov-confirmar").onclick=()=>confirmarMovimentacao(tipo);
+  abrirModal("overlay-mov");
+  setTimeout(()=>document.getElementById("mov-desc").focus(),300);
+}
+
+async function confirmarMovimentacao(tipo){
+  const desc=document.getElementById("mov-desc").value.trim();
+  const valor=document.getElementById("mov-valor").value;
+  if(!desc||!valor){toast("Preencha descrição e valor","erro");return;}
+  const d=JSON.parse(JSON.stringify(dados));
+  d.caixa.movimentacoes.push({id:"mov"+Date.now(),tipo,desc,valor:parseFloat(valor),data:new Date().toLocaleDateString("pt-BR"),origem:"manual"});
+  await gravarBin(d);fecharModal("overlay-mov");renderAba();toast(tipo==="entrada"?"✅ Entrada registrada!":"✅ Saída registrada!");
+}
+
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
-function abrirAdminMenu() {
+function abrirAdminMenu(){
   if(isAdmin){abrirModal("overlay-admmenu");return;}
   document.getElementById("input-senha-adm").value="";
   abrirModal("overlay-login");
   setTimeout(()=>document.getElementById("input-senha-adm").focus(),300);
 }
 
-function confirmarLogin() {
+function confirmarLogin(){
   const senha=document.getElementById("input-senha-adm").value;
   if(senha===SENHA_ADM){isAdmin=true;document.getElementById("badge-adm").style.display="inline";fecharModal("overlay-login");abrirModal("overlay-admmenu");toast("Modo ADM ativado");}
   else toast("Senha incorreta","erro");
 }
 
 function sairAdm(){isAdmin=false;document.getElementById("badge-adm").style.display="none";fecharModal("overlay-admmenu");toast("Modo ADM desativado","info");}
+function abrirNovaSemana(){abrirModal("overlay-novasemana");}
 
-async function confirmarNovaSemana() {
+async function confirmarNovaSemana(){
   const d=JSON.parse(JSON.stringify(dados));
   d.historico=[d.semanaAtual,...(d.historico||[])];d.semanaAtual=semanaVazia();
   await gravarBin(d);fecharModal("overlay-novasemana");renderAba();toast("✅ Nova semana iniciada!");
 }
 
-function abrirNovaSemana(){abrirModal("overlay-novasemana");}
-
-function abrirHistorico() {
+function abrirHistorico(){
   const historico=dados?.historico||[];
   const el=document.getElementById("historico-content");
   el.innerHTML=historico.length===0
@@ -760,7 +1152,7 @@ function abrirHistorico() {
   abrirModal("overlay-historico");
 }
 
-function verResumoSemana(idx) {
+function verResumoSemana(idx){
   const s=dados.historico[idx];
   const jogs=s.jogadores?.filter(j=>j.nome)||[]; const aus=s.ausentes||[]; const ch=s.churrasco;
   let html=`<button class="btn-small" style="background:#f0faf4;color:#1a7a3e;border:1px solid #b0ddc0;margin-bottom:12px" onclick="abrirHistorico()">← Voltar</button>`;
@@ -768,107 +1160,22 @@ function verResumoSemana(idx) {
   html+=`<p style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Jogadores (${jogs.length})</p>`;
   jogs.forEach(j=>{html+=`<div style="font-size:13px;color:#555;padding:3px 0">${j.id}. ${j.nome}</div>`;});
   if(aus.length>0){html+=`<p style="font-size:11px;color:#c0392b;margin-top:10px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Ausentes (${aus.length})</p>`;aus.forEach(a=>{html+=`<div style="font-size:13px;color:#888;padding:3px 0">${a.nome}${a.motivo?" — "+a.motivo:""}</div>`;});}
-  if(ch?.confirmado){html+=`<p style="font-size:11px;color:#c85000;margin-top:10px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Churrasco</p>`;html+=`<div style="font-size:13px;color:#555">Responsável: ${ch.responsavel}</div><div style="font-size:13px;color:#1a7a3e;font-weight:700">Total: R$ ${parseFloat(ch.valorTotal||0).toFixed(2)}</div><div style="font-size:12px;color:#aaa;margin-top:4px">${(ch.pagos||[]).length} pagaram</div>`;}
+  if(ch?.confirmado){html+=`<p style="font-size:11px;color:#c85000;margin-top:10px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Churrasco</p>`;html+=`<div style="font-size:13px;color:#555">Responsável: ${ch.responsavel}</div><div style="font-size:13px;color:#1a7a3e;font-weight:700">Total: R$ ${parseFloat(ch.valorTotal||0).toFixed(2)}</div>`;}
   document.getElementById("historico-content").innerHTML=html;
 }
 
-function abrirConvitesCfg() {
+function abrirConvitesCfg(){
   const cv=dados?.semanaAtual?.convites||{};
-  const inicio=window.prompt("Número inicial:",cv.inicio||"56508298105"); if(!inicio) return;
-  const fim=window.prompt("Número final:",cv.fim||"56508298119"); if(!fim) return;
-  const semana=window.prompt("Nome da semana:",cv.semana||dados.semanaAtual.data); if(!semana) return;
+  const inicio=window.prompt("Número inicial:",cv.inicio||"56508298105");if(!inicio)return;
+  const fim=window.prompt("Número final:",cv.fim||"56508298119");if(!fim)return;
+  const semana=window.prompt("Nome da semana:",cv.semana||dados.semanaAtual.data);if(!semana)return;
   const d=JSON.parse(JSON.stringify(dados));
   d.semanaAtual.convites={inicio,fim,semana,reservas:{}};
   gravarBin(d).then(()=>{renderAba();toast("✅ Convites configurados!");});
 }
 
-// ── MODAL ENTRADA LISTA ───────────────────────────────────────────────────────
-let entradaTipo = null;
-let entradaIdx = null;
-
-function abrirModalEntrada(tipo, idx) {
-  if (!dados?.semanaAtual) { toast("Aguarde, carregando...","info"); return; }
-  entradaTipo = tipo;
-  entradaIdx = idx;
-  const titulo = tipo === "goleiro" ? `Entrar como Goleiro GL${idx+1}` : `Entrar na vaga ${dados.semanaAtual.jogadores[idx].id}`;
-  document.getElementById("entrada-titulo").textContent = titulo;
-  document.getElementById("entrada-nome").value = "";
-  document.getElementById("entrada-ch").checked = false;
-  document.getElementById("entrada-confirmar").onclick = confirmarEntrada;
-  abrirModal("overlay-entrada");
-  setTimeout(()=>document.getElementById("entrada-nome").focus(), 300);
-}
-
-async function confirmarEntrada() {
-  const nome = document.getElementById("entrada-nome").value.trim();
-  const ch = document.getElementById("entrada-ch").checked;
-  if (!nome) { toast("Digite seu nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  if (entradaTipo === "goleiro") {
-    d.semanaAtual.goleiros[entradaIdx] = { ...d.semanaAtual.goleiros[entradaIdx], nome, churrasco: ch };
-    await gravarBin(d); fecharModal("overlay-entrada"); renderAba(); toast(nome + " entrou como goleiro! ⚽");
-  } else {
-    d.semanaAtual.jogadores[entradaIdx] = { ...d.semanaAtual.jogadores[entradaIdx], nome, churrasco: ch };
-    await gravarBin(d); fecharModal("overlay-entrada"); renderAba(); toast(nome + " entrou na lista! ⚽");
-  }
-}
-
-function abrirModalEspera() {
-  if (!dados?.semanaAtual) { toast("Aguarde, carregando...","info"); return; }
-  document.getElementById("em-nome").value = "";
-  document.getElementById("em-ch").checked = false;
-  abrirModal("overlay-espera-modal");
-  setTimeout(()=>document.getElementById("em-nome").focus(), 300);
-}
-
-async function confirmarEsperaModal() {
-  const nome = document.getElementById("em-nome").value.trim();
-  const ch = document.getElementById("em-ch").checked;
-  if (!nome) { toast("Digite seu nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.espera.push({ id:"e"+Date.now(), nome, churrasco:ch });
-  await gravarBin(d); fecharModal("overlay-espera-modal"); renderAba(); toast(nome+" entrou na lista de espera!");
-}
-
-function abrirModalAusente() {
-  document.getElementById("am-nome").value = "";
-  document.getElementById("am-motivo").value = "";
-  document.getElementById("am-ch").checked = false;
-  abrirModal("overlay-ausente-modal");
-  setTimeout(()=>document.getElementById("am-nome").focus(), 300);
-}
-
-async function confirmarAusenteModal() {
-  const nome = document.getElementById("am-nome").value.trim();
-  const motivo = document.getElementById("am-motivo").value.trim();
-  const ch = document.getElementById("am-ch").checked;
-  if (!nome) { toast("Digite o nome","erro"); return; }
-  const d = JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.ausentes.push({ id:"a"+Date.now(), nome, motivo, churrasco:ch });
-  await gravarBin(d); fecharModal("overlay-ausente-modal"); renderAba(); toast("Ausência registrada!");
-}
-
-function abrirFormConvidado() { abrirModal("overlay-convidado-modal"); setTimeout(()=>document.getElementById("cv-nome").focus(),300); }
-
-async function confirmarConvidadoModal() {
-  const nome = document.getElementById("cv-nome").value.trim();
-  if (!nome) { toast("Digite o nome do convidado","erro"); return; }
-  try {
-    const d = await lerBin();
-    const cv = d.semanaAtual.convites||{}; const reservas = cv.reservas||{};
-    const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
-    const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
-    const livre = numeros.find(n=>!reservas[n]);
-    if (!livre) { toast("Sem convites disponíveis!","erro"); return; }
-    reservas[livre] = { convidado: nome, geradoPor: uid };
-    d.semanaAtual.convites.reservas = reservas;
-    await gravarBin(d); fecharModal("overlay-convidado-modal"); renderAba();
-    toast("🎫 Convite "+livre+" gerado para "+nome+"!");
-  } catch { toast("Erro ao gerar convite","erro"); }
-}
-
-function abrirModal(id){document.getElementById(id).classList.add("ativo");}
-function fecharModal(id){document.getElementById(id).classList.remove("ativo");}
+function abrirModal(id){document.getElementById(id)?.classList.add("ativo");}
+function fecharModal(id){document.getElementById(id)?.classList.remove("ativo");}
 document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("ativo");}));
 
 var toastTimer;
@@ -876,7 +1183,7 @@ function toast(msg,tipo){
   tipo=tipo||"ok";
   const t=document.getElementById("toast");
   t.textContent=msg;t.className="toast "+tipo;t.style.display="block";
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display="none";},3000);
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display="none";},3500);
 }
 
 document.querySelectorAll(".nav-btn").forEach((b,i)=>b.classList.toggle("ativo",i===abaAtual));
