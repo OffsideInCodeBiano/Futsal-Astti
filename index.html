@@ -195,14 +195,8 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
 <div class="overlay" id="overlay-churrasco-cfg">
   <div class="modal">
     <div class="modal-header"><span class="modal-titulo">🍖 Configurar Churrasco</span><button class="btn-fechar" onclick="fecharModal('overlay-churrasco-cfg')">✕</button></div>
-    <label class="label">Responsável pela compra</label>
-    <input class="input" id="ch-responsavel" placeholder="Nome de quem comprou" style="margin-bottom:12px"/>
-    <label class="label">Valor total (R$)</label>
-    <input class="input" id="ch-valor" type="number" placeholder="Ex: 420.00" style="margin-bottom:12px"/>
-    <label class="label">Chave Pix</label>
-    <input class="input" id="ch-pix" placeholder="Celular, CPF ou e-mail" style="margin-bottom:12px"/>
-    <label class="label">Tipo da chave</label>
-    <select class="input" id="ch-tipo" style="margin-bottom:18px"><option>Celular</option><option>CPF</option><option>E-mail</option><option>Aleatória</option></select>
+    <div id="responsaveis-lista"></div>
+    <button class="btn-add-vaga" style="border-color:#c0e8d0;color:#1a7a3e;background:#f0faf4;margin-bottom:16px" onclick="adicionarResponsavelForm()">+ Adicionar responsável</button>
     <button class="btn-block" style="background:#1a7a3e;color:#fff" onclick="salvarChurrascoCfg()">💾 Salvar</button>
     <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-churrasco-cfg')">Cancelar</button>
   </div>
@@ -443,7 +437,11 @@ function renderConvites(s) {
   return html;
 }
 
+let processandoPegar = false;
+
 async function pegarConvite() {
+  if (processandoPegar) return;
+  processandoPegar = true;
   try {
     const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
     const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
@@ -455,6 +453,7 @@ async function pegarConvite() {
     reservas[livre]=uid; d.semanaAtual.convites.reservas=reservas;
     await gravarBin(d); renderAba(); toast("✅ Convite "+livre+" é seu!");
   } catch{toast("Erro ao reservar","erro");}
+  finally { processandoPegar=false; }
 }
 
 async function liberarConvite() {
@@ -467,20 +466,25 @@ async function liberarConvite() {
 
 function abrirFormConvidado(){abrirModal("overlay-convidado-modal");setTimeout(()=>document.getElementById("cv-nome").focus(),300);}
 
+let processandoConvite = false;
+
 async function confirmarConvidadoModal() {
+  if (processandoConvite) return;
+  processandoConvite = true;
   const nome=document.getElementById("cv-nome").value.trim();
-  if(!nome){toast("Digite o nome do convidado","erro");return;}
+  if(!nome){ toast("Digite o nome do convidado","erro"); processandoConvite=false; return; }
   try {
     const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
     const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
     const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
     const livre=numeros.find(n=>!reservas[n]);
-    if(!livre){toast("Sem convites disponíveis!","erro");return;}
+    if(!livre){toast("Sem convites disponíveis!","erro"); processandoConvite=false; return;}
     reservas[livre]={convidado:nome,geradoPor:uid};
     d.semanaAtual.convites.reservas=reservas;
     await gravarBin(d);fecharModal("overlay-convidado-modal");renderAba();
     toast("🎫 Convite "+livre+" gerado para "+nome+"!");
-  } catch{toast("Erro ao gerar convite","erro");}
+  } catch{ toast("Erro ao gerar convite","erro"); }
+  finally { processandoConvite=false; }
 }
 
 // ── LISTA ─────────────────────────────────────────────────────────────────────
@@ -717,8 +721,17 @@ function renderChurrasco(s) {
   const ch=s.churrasco; const participantes=getParticipantesChurrasco(s);
   if(!ch.confirmado) return `<div class="placeholder"><div style="font-size:48px;margin-bottom:12px">🍖</div><p style="color:#bbb;font-size:14px;margin-bottom:24px">Churrasco não confirmado para esta semana.</p>${isAdmin?`<button class="btn-principal" onclick="abrirChurrascoCfg()">+ Configurar churrasco</button>`:""}</div>`;
 
-  const valorBase=participantes.length>0&&ch.valorTotal>0?parseFloat(ch.valorTotal)/participantes.length:0;
+  // Suporta múltiplos responsáveis
+  const responsaveis = ch.responsaveis || [{nome:ch.responsavel,valor:ch.valorTotal,pixChave:ch.pixChave,pixTipo:ch.pixTipo||"Celular"}];
+  const valorTotal = responsaveis.reduce((a,r)=>a+parseFloat(r.valor||0),0);
+  const valorBase = participantes.length>0&&valorTotal>0 ? valorTotal/participantes.length : 0;
+
   function calcTotal(nome){const ex=(ch.extras||[]).find(e=>e.nome===nome);return valorBase+(ex?parseFloat(ex.valor):0);}
+  function calcParaResponsavel(totalPessoa, responsavel){
+    if(valorTotal===0)return 0;
+    return totalPessoa*(parseFloat(responsavel.valor)/valorTotal);
+  }
+
   const pagos=participantes.filter(p=>(ch.pagos||[]).includes(p.nome));
   const pendentes=participantes.filter(p=>!(ch.pagos||[]).includes(p.nome));
   const totalPago=pagos.reduce((a,p)=>a+calcTotal(p.nome),0);
@@ -732,29 +745,59 @@ function renderChurrasco(s) {
       <span style="margin-left:auto;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px">✅ Ativo</span>
     </div>
     ${isAdmin?`<button class="btn-small" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);margin-top:12px;width:100%;padding:10px" onclick="abrirChurrascoCfg()">✏️ Editar configuração</button>`:""}
-  </div>
-  <div class="pix-card">
-    <div class="pix-row">
-      <div><div class="pix-label">Responsável</div><div class="pix-valor">${ch.responsavel}</div></div>
-      <div style="text-align:right"><div class="pix-label">Total gasto</div><div class="pix-valor" style="color:#1a7a3e">R$ ${parseFloat(ch.valorTotal).toFixed(2)}</div></div>
-    </div>
-    <hr class="divisor">
-    <div class="pix-label">Chave Pix</div>
-    <div class="pix-chave-row"><span style="font-size:13px;font-weight:700;color:#1a7a3e;flex:1">${ch.pixChave}</span><span style="font-size:10px;color:#aaa">(${ch.pixTipo})</span></div>
-    <button class="btn-pix" id="btn-pix" onclick="copiarPix('${ch.pixChave}')">📲 Copiar chave Pix</button>
   </div>`;
 
+  // Card de cada responsável
+  responsaveis.forEach((r,ri)=>{
+    html+=`<div class="pix-card" style="margin-bottom:8px">
+      <div class="pix-row">
+        <div><div class="pix-label">Responsável ${responsaveis.length>1?ri+1:""}</div><div class="pix-valor">${r.nome}</div></div>
+        <div style="text-align:right"><div class="pix-label">Gasto</div><div class="pix-valor" style="color:#1a7a3e">R$ ${parseFloat(r.valor).toFixed(2)}</div></div>
+      </div>
+      <hr class="divisor">
+      <div class="pix-label">Chave Pix</div>
+      <div class="pix-chave-row"><span style="font-size:13px;font-weight:700;color:#1a7a3e;flex:1">${r.pixChave}</span><span style="font-size:10px;color:#aaa">(${r.pixTipo||"Celular"})</span></div>
+      <button class="btn-pix" id="btn-pix-${ri}" onclick="copiarPixResp(${ri},'${r.pixChave}')">📲 Copiar chave Pix</button>
+    </div>`;
+  });
+
+  if(responsaveis.length>1){
+    html+=`<div style="background:#f0faf4;border:1px solid #b0ddc0;border-radius:12px;padding:12px;margin-bottom:12px;text-align:center">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Total geral</div>
+      <div style="font-size:22px;font-weight:900;color:#1a7a3e">R$ ${valorTotal.toFixed(2)}</div>
+    </div>`;
+  }
+
+  // Rateio com breakdown por responsável
   html+=`<div class="secao"><div class="secao-header"><span class="secao-titulo">RATEIO</span><span class="secao-badge" style="background:#fff8f0;color:#c85000;border:1px solid #e8c0a0">${participantes.length} pessoas</span></div><div class="secao-body">
-    <div style="padding:4px 0 8px;color:#aaa;font-size:11px;text-align:center">Valor base: <strong style="color:#c85000">R$ ${valorBase.toFixed(2)}</strong> por pessoa</div>
-    <div class="th-row"><span style="flex:1">Nome</span><span style="width:52px;text-align:right">Extra</span><span style="width:72px;text-align:right">Total</span>${isAdmin?'<span style="width:44px;text-align:center">Pago</span>':''}</div>`;
+    <div style="padding:4px 0 8px;color:#aaa;font-size:11px;text-align:center">Total por pessoa: <strong style="color:#c85000">R$ ${valorBase.toFixed(2)}</strong></div>`;
+
   participantes.forEach(p=>{
     const ex=(ch.extras||[]).find(e=>e.nome===p.nome);
     const total=calcTotal(p.nome); const pago=(ch.pagos||[]).includes(p.nome);
-    html+=`<div class="linha-rateio" style="background:${pago?"#f0faf4":"#f8f9f8"};border:1px solid ${pago?"#b0ddc0":"#dde8dd"}">
-      <span style="flex:1;font-size:13px;font-weight:600;color:${pago?"#1a7a3e":"#1a1a1a"}">${p.nome}</span>
-      ${ex?`<span style="width:52px;font-size:11px;color:#c85000;text-align:right">+R$${parseFloat(ex.valor).toFixed(0)}</span>`:`<span style="width:52px;font-size:11px;color:#ccc;text-align:right">—</span>`}
-      <span style="width:72px;font-size:13px;font-weight:700;color:${pago?"#1a7a3e":"#333"};text-align:right">R$ ${total.toFixed(2)}</span>
-      ${isAdmin?`<button onclick="togglePago('${p.nome}')" style="width:40px;padding:4px 0;border-radius:8px;border:1px solid ${pago?"#b0ddc0":"#ddd"};background:${pago?"#e0f5e8":"#f5f5f5"};color:${pago?"#1a7a3e":"#bbb"};font-size:12px;cursor:pointer;font-family:inherit">${pago?"✅":"—"}</button>`:""}
+
+    // Breakdown por responsável quando há mais de um
+    let breakdown="";
+    if(responsaveis.length>1){
+      breakdown=`<div style="margin-top:4px;padding:6px 8px;background:#f8f8f8;border-radius:8px;display:flex;flex-direction:column;gap:3px">`;
+      responsaveis.forEach((r,ri)=>{
+        const val=calcParaResponsavel(total,r);
+        breakdown+=`<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px">
+          <span style="color:#888">→ ${r.nome}</span>
+          <span style="font-weight:600;color:#1a5a8a">R$ ${val.toFixed(2)}</span>
+        </div>`;
+      });
+      breakdown+=`</div>`;
+    }
+
+    html+=`<div style="background:${pago?"#f0faf4":"#f8f9f8"};border:1px solid ${pago?"#b0ddc0":"#dde8dd"};border-radius:10px;padding:9px 8px;margin-bottom:3px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="flex:1;font-size:13px;font-weight:600;color:${pago?"#1a7a3e":"#1a1a1a"}">${p.nome}</span>
+        ${ex?`<span style="font-size:11px;color:#c85000">+R$${parseFloat(ex.valor).toFixed(0)}</span>`:""}
+        <span style="font-size:13px;font-weight:700;color:${pago?"#1a7a3e":"#333"}">R$ ${total.toFixed(2)}</span>
+        ${`<button onclick="togglePago('${p.nome}')" style="width:40px;padding:4px 0;border-radius:8px;border:1px solid ${pago?"#b0ddc0":"#ddd"};background:${pago?"#e0f5e8":"#f5f5f5"};color:${pago?"#1a7a3e":"#bbb"};font-size:12px;cursor:pointer;font-family:inherit">${pago?"✅":"—"}</button>`}
+      </div>
+      ${breakdown}
     </div>`;
   });
   html+=`</div></div>`;
@@ -780,29 +823,72 @@ function renderChurrasco(s) {
   return html;
 }
 
-function copiarPix(chave){
+function copiarPixResp(ri, chave){
   navigator.clipboard?.writeText(chave);
-  const btn=document.getElementById("btn-pix");
+  const btn=document.getElementById("btn-pix-"+ri);
   if(btn){btn.textContent="✅ Chave copiada!";btn.style.background="#e8f5ee";setTimeout(()=>{btn.textContent="📲 Copiar chave Pix";btn.style.background="#f0faf4";},2000);}
+}
+
+let responsaveisForm = [];
+
+function renderResponsaveisForm(){
+  const lista=document.getElementById("responsaveis-lista");
+  if(!lista)return;
+  lista.innerHTML=responsaveisForm.map((r,i)=>`
+    <div style="background:#f5f8f5;border:1px solid #dde8dd;border-radius:12px;padding:12px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:700;color:#1a7a3e;text-transform:uppercase;letter-spacing:.06em">Responsável ${responsaveisForm.length>1?i+1:""}</span>
+        ${responsaveisForm.length>1?`<button onclick="removerResponsavelForm(${i})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:inherit">✕</button>`:""}
+      </div>
+      <label class="label">Nome</label>
+      <input class="input" placeholder="Nome de quem comprou" value="${r.nome||""}" oninput="responsaveisForm[${i}].nome=this.value" style="margin-bottom:8px"/>
+      <label class="label">Valor gasto (R$)</label>
+      <input class="input" type="number" placeholder="Ex: 300.00" value="${r.valor||""}" oninput="responsaveisForm[${i}].valor=this.value" style="margin-bottom:8px"/>
+      <label class="label">Chave Pix</label>
+      <input class="input" placeholder="Celular, CPF ou e-mail" value="${r.pixChave||""}" oninput="responsaveisForm[${i}].pixChave=this.value" style="margin-bottom:8px"/>
+      <label class="label">Tipo da chave</label>
+      <select class="input" onchange="responsaveisForm[${i}].pixTipo=this.value">
+        ${["Celular","CPF","E-mail","Aleatória"].map(t=>`<option ${r.pixTipo===t?"selected":""}>${t}</option>`).join("")}
+      </select>
+    </div>`).join("");
+}
+
+function adicionarResponsavelForm(){
+  responsaveisForm.push({nome:"",valor:"",pixChave:"",pixTipo:"Celular"});
+  renderResponsaveisForm();
+}
+
+function removerResponsavelForm(i){
+  responsaveisForm.splice(i,1);
+  renderResponsaveisForm();
 }
 
 function abrirChurrascoCfg(){
   const ch=dados?.semanaAtual?.churrasco||{};
-  document.getElementById("ch-responsavel").value=ch.responsavel||"";
-  document.getElementById("ch-valor").value=ch.valorTotal||"";
-  document.getElementById("ch-pix").value=ch.pixChave||"";
-  document.getElementById("ch-tipo").value=ch.pixTipo||"Celular";
+  // Carrega responsáveis existentes ou cria um padrão
+  responsaveisForm = ch.responsaveis
+    ? JSON.parse(JSON.stringify(ch.responsaveis))
+    : [{nome:ch.responsavel||"",valor:ch.valorTotal||"",pixChave:ch.pixChave||"",pixTipo:ch.pixTipo||"Celular"}];
+  renderResponsaveisForm();
   abrirModal("overlay-churrasco-cfg");
 }
 
 async function salvarChurrascoCfg(){
-  const responsavel=document.getElementById("ch-responsavel").value.trim();
-  const valorTotal=document.getElementById("ch-valor").value;
-  const pixChave=document.getElementById("ch-pix").value.trim();
-  const pixTipo=document.getElementById("ch-tipo").value;
-  if(!responsavel||!valorTotal||!pixChave){toast("Preencha todos os campos","erro");return;}
+  if(responsaveisForm.some(r=>!r.nome||!r.valor||!r.pixChave)){
+    toast("Preencha todos os campos de cada responsável","erro");return;
+  }
   const d=JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.churrasco={...d.semanaAtual.churrasco,confirmado:true,responsavel,valorTotal:parseFloat(valorTotal),pixChave,pixTipo};
+  const totalGeral=responsaveisForm.reduce((a,r)=>a+parseFloat(r.valor||0),0);
+  d.semanaAtual.churrasco={
+    ...d.semanaAtual.churrasco,
+    confirmado:true,
+    responsaveis:responsaveisForm.map(r=>({...r,valor:parseFloat(r.valor)})),
+    // mantém campos antigos para compatibilidade
+    responsavel:responsaveisForm[0].nome,
+    valorTotal:totalGeral,
+    pixChave:responsaveisForm[0].pixChave,
+    pixTipo:responsaveisForm[0].pixTipo
+  };
   await gravarBin(d);fecharModal("overlay-churrasco-cfg");renderAba();toast("✅ Churrasco configurado!");
 }
 
@@ -1002,8 +1088,9 @@ async function removerMensalista(idx){
 function copiarMensalistas(){
   const m=dados?.mensalistas; if(!m) return;
   const membros=m.membros||[];
+  const rateio=membros.length>0?(parseFloat(m.valorBase)/membros.length).toFixed(2):parseFloat(m.valorBase).toFixed(2);
   let txt=`👥 *ASTTI FC — Mensalistas*\n`;
-  txt+=`📅 ${m.mes||mesAtual()}\n\n`;
+  txt+=`📅 ${m.mes||mesAtual()} · Valor: R$ ${rateio}/pessoa\n\n`;
   if(membros.length>0){
     membros.forEach((x,i)=>{ txt+=`${i+1}. ${x.nome} — ${x.pago?"✅ Pago":"⏳ Pendente"}\n`; });
   } else { txt+=`Nenhum mensalista cadastrado ainda.\n`; }
