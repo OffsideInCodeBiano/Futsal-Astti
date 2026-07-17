@@ -874,8 +874,8 @@ function abrirChurrascoCfg(){
 }
 
 async function salvarChurrascoCfg(){
-  if(responsaveisForm.some(r=>!r.nome||!r.valor||!r.pixChave)){
-    toast("Preencha todos os campos de cada responsável","erro");return;
+  if(responsaveisForm.some(r=>!r.nome||!r.pixChave)){
+    toast("Preencha o nome e a chave Pix de cada responsável","erro");return;
   }
   const d=JSON.parse(JSON.stringify(dados));
   const totalGeral=responsaveisForm.reduce((a,r)=>a+parseFloat(r.valor||0),0);
