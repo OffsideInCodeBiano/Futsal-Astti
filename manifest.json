@@ -1,0 +1,22 @@
+{
+  "name": "ASTTI FC",
+  "short_name": "ASTTI FC",
+  "description": "Gestão do grupo de futsal ASTTI FC",
+  "start_url": "/Futsal-Astti/",
+  "display": "standalone",
+  "background_color": "#eef0ee",
+  "theme_color": "#1a3a22",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "iconeAstti.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "iconeAstti.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
