@@ -178,6 +178,10 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
       <button class="btn-block" style="background:#f0f4fa;color:#1a3a6a;border:1px solid #c0cce8" onclick="fecharModal('overlay-admmenu');editarNomeSemana()">✏️ Editar nome da semana</button>
       <button class="btn-block" style="background:#f0faf4;color:#1a7a3e;border:1px solid #b0ddc0" onclick="fecharModal('overlay-admmenu');abrirHistorico()">📚 Ver histórico</button>
       <button class="btn-block" style="background:#fff8f5;color:#c85000;border:1px solid #e8c0a0" onclick="fecharModal('overlay-admmenu');limparHistorico()">🗑️ Limpar histórico</button>
+      <div id="menu-super-adm" style="display:none;flex-direction:column;gap:6px;border-top:1px solid #eee;padding-top:10px;margin-top:4px">
+        <p style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;text-align:center">👑 Super ADM</p>
+        <button class="btn-block" style="background:#f5f0fa;color:#6a1a8a;border:1px solid #d0b0e8;margin-bottom:0" onclick="fecharModal('overlay-admmenu');abrirGerenciarSenhas()">🔑 Gerenciar senhas ADM</button>
+      </div>
       <button class="btn-block" style="background:#fff5f5;color:#c0392b;border:1px solid #e8b0b0" onclick="fecharModal('overlay-admmenu');sairAdm()">🔒 Sair do ADM</button>
     </div>
   </div>
@@ -305,17 +309,34 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #eef0ee; min-hei
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay-nova-senha-adm">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-titulo">🔑 Nova senha ADM</span><button class="btn-fechar" onclick="fecharModal('overlay-nova-senha-adm')">✕</button></div>
+    <p style="color:#888;font-size:13px;margin-bottom:16px;line-height:1.5">Digite uma nova senha para acesso ADM. Ela ficará salva e poderá ser usada para entrar como administrador.</p>
+    <label class="label">Nova senha</label>
+    <input class="input" type="password" id="input-nova-senha" placeholder="Digite a nova senha" style="margin-bottom:18px"/>
+    <button class="btn-block" style="background:#1a3a6a;color:#fff" onclick="salvarNovaSenhaAdm()">💾 Salvar senha</button>
+    <button class="btn-block" style="background:#f5f5f5;color:#888" onclick="fecharModal('overlay-nova-senha-adm')">Cancelar</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-gerenciar-senhas">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-titulo">👑 Gerenciar senhas ADM</span><button class="btn-fechar" onclick="fecharModal('overlay-gerenciar-senhas')">✕</button></div>
+    <div id="lista-senhas-adm"></div>
+    <button class="btn-block" style="background:#f5f5f5;color:#888;margin-top:8px" onclick="fecharModal('overlay-gerenciar-senhas')">Fechar</button>
+  </div>
+</div>
 
 <script>
 const BIN_ID  = "6a308dc8f5f4af5e29f83e55";
 const API_KEY = "$2a$10$n0B0E8k9OT7FkvEh01F9gOp3Vj6MrXYdvO/LoRkHQwYesI0/epnNC";
 const BIN_URL = "https://api.jsonbin.io/v3/b/" + BIN_ID;
-const SENHA_ADM = "astti2025";
 
 let dados = null;
 let abaAtual = 1;
 let isAdmin = false;
+let isSuperAdmin = false;
 let entradaTipo = null;
 let entradaIdx = null;
 let uid = localStorage.getItem("astti_uid") || (()=>{ const u=Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem("astti_uid",u); return u; })();
@@ -1213,20 +1234,97 @@ async function confirmarMovimentacao(tipo){
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
 function abrirAdminMenu(){
-  if(isAdmin){abrirModal("overlay-admmenu");return;}
+  if(isAdmin){
+    // Mostra opção super ADM se for super
+    document.getElementById("menu-super-adm").style.display = isSuperAdmin ? "flex" : "none";
+    abrirModal("overlay-admmenu");
+    return;
+  }
   document.getElementById("input-senha-adm").value="";
   abrirModal("overlay-login");
   setTimeout(()=>document.getElementById("input-senha-adm").focus(),300);
 }
 
-function confirmarLogin(){
-  const senha=document.getElementById("input-senha-adm").value;
-  if(senha===SENHA_ADM){isAdmin=true;document.getElementById("badge-adm").style.display="inline";fecharModal("overlay-login");abrirModal("overlay-admmenu");toast("Modo ADM ativado");}
-  else toast("Senha incorreta","erro");
+const SENHA_MASTER = "resenha_astti";
+const SENHA_SUPER  = "astti_fabiano";
+
+function verificarSenha(senha) {
+  if (senha === SENHA_SUPER) return "super";
+  const senhasAdm = dados?.senhasAdm || [];
+  if (senhasAdm.includes(senha)) return "adm";
+  return null;
 }
 
-function sairAdm(){isAdmin=false;document.getElementById("badge-adm").style.display="none";fecharModal("overlay-admmenu");toast("Modo ADM desativado","info");}
+function confirmarLogin(){
+  const senha = document.getElementById("input-senha-adm").value;
+  if (senha === SENHA_MASTER) {
+    fecharModal("overlay-login");
+    abrirModal("overlay-nova-senha-adm");
+    setTimeout(()=>document.getElementById("input-nova-senha").focus(),300);
+    return;
+  }
+  const nivel = verificarSenha(senha);
+  if (nivel === "super") {
+    isAdmin = true; isSuperAdmin = true;
+    document.getElementById("badge-adm").textContent = "SUPER";
+    document.getElementById("badge-adm").style.display = "inline";
+    fecharModal("overlay-login"); abrirModal("overlay-admmenu");
+    toast("Modo Super ADM ativado 👑");
+  } else if (nivel === "adm") {
+    isAdmin = true; isSuperAdmin = false;
+    document.getElementById("badge-adm").textContent = "ADM";
+    document.getElementById("badge-adm").style.display = "inline";
+    fecharModal("overlay-login"); abrirModal("overlay-admmenu");
+    toast("Modo ADM ativado");
+  } else {
+    toast("Senha incorreta","erro");
+  }
+}
+
+function sairAdm(){
+  isAdmin=false; isSuperAdmin=false;
+  document.getElementById("badge-adm").style.display="none";
+  fecharModal("overlay-admmenu");
+  toast("Modo ADM desativado","info");
+}
 function abrirNovaSemana(){abrirModal("overlay-novasemana");}
+
+async function salvarNovaSenhaAdm(){
+  const senha = document.getElementById("input-nova-senha").value.trim();
+  if(!senha){ toast("Digite uma senha","erro"); return; }
+  if(senha === SENHA_MASTER || senha === SENHA_SUPER){ toast("Senha reservada, escolha outra","erro"); return; }
+  const d = JSON.parse(JSON.stringify(dados));
+  if(!d.senhasAdm) d.senhasAdm = [];
+  if(d.senhasAdm.includes(senha)){ toast("Essa senha já existe!","info"); return; }
+  d.senhasAdm.push(senha);
+  await gravarBin(d);
+  fecharModal("overlay-nova-senha-adm");
+  toast("✅ Nova senha ADM salva!");
+}
+
+function abrirGerenciarSenhas(){
+  const senhas = dados?.senhasAdm || [];
+  const el = document.getElementById("lista-senhas-adm");
+  if(senhas.length === 0){
+    el.innerHTML = `<p style="color:#bbb;font-size:13px;text-align:center;padding:20px 0">Nenhuma senha ADM cadastrada.</p>`;
+  } else {
+    el.innerHTML = senhas.map((s,i) => `
+      <div style="display:flex;align-items:center;gap:10px;background:#f5f8f5;border:1px solid #dde8dd;border-radius:10px;padding:12px;margin-bottom:8px">
+        <span style="flex:1;font-size:14px;font-weight:600;color:#1a1a1a;letter-spacing:.1em">${"•".repeat(s.length)}</span>
+        <button onclick="excluirSenhaAdm(${i})" style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:700">🗑️ Excluir</button>
+      </div>`).join("");
+  }
+  abrirModal("overlay-gerenciar-senhas");
+}
+
+async function excluirSenhaAdm(idx){
+  if(!confirm("Excluir esta senha ADM?")) return;
+  const d = JSON.parse(JSON.stringify(dados));
+  d.senhasAdm.splice(idx, 1);
+  await gravarBin(d);
+  abrirGerenciarSenhas();
+  toast("Senha excluída.","info");
+}
 
 async function confirmarNovaSemana(){
   const d=JSON.parse(JSON.stringify(dados));
