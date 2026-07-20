@@ -337,8 +337,8 @@ let dados = null;
 let abaAtual = 1;
 let isAdmin = false;
 let isSuperAdmin = false;
-let entradaTipo = null;
-let entradaIdx = null;
+let processandoPegar = false;
+let processandoConvite = false;
 let uid = localStorage.getItem("astti_uid") || (()=>{ const u=Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem("astti_uid",u); return u; })();
 
 function mesAtual() {
@@ -463,7 +463,12 @@ function renderConvites(s) {
     const border=meuEste?"#1a7a3e":convidado?"#1a4a7a":ocupado?"#ddd":"#b0ddc0";
     const cor=meuEste?"#fff":convidado?"#fff":ocupado?"#ccc":"#1a7a3e";
     const label=meuEste?"👤 eu":convidado?nomeConvidado.split(" ")[0].substring(0,7):ocupado?"🔴":"🟢";
-    html+=`<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor}" ${convidado?`onclick="toast('🎫 ${nomeConvidado} — Nº ${n}','info')"`:""}>
+    const tooltipClick = convidado
+      ? `onclick="toast('🎫 ${nomeConvidado} — Nº ${n}','info')"`
+      : meuEste
+      ? `onclick="toast('Seu convite: ${n}','info')"`
+      : "";
+    html+=`<div class="convite-chip" style="background:${bg};border-color:${border};color:${cor};cursor:${convidado||meuEste?"pointer":"default"}" ${tooltipClick}>
       <span>${n.slice(-4)}</span>
       <span style="font-size:${convidado?'8px':'10px'};text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span>
     </div>`;
@@ -513,8 +518,6 @@ async function liberarConvite() {
 }
 
 function abrirFormConvidado(){abrirModal("overlay-convidado-modal");setTimeout(()=>document.getElementById("cv-nome").focus(),300);}
-
-let processandoConvite = false;
 
 async function confirmarConvidadoModal() {
   if (processandoConvite) return;
