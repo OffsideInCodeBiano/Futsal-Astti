@@ -347,7 +347,7 @@ function mesAtual() {
 
 function semanaVazia() {
   const data = new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});
-  return { data, dataPartida:"", convites:{inicio:"56508298105",fim:"56508298119",semana:data,reservas:{}}, goleiros:[{id:"g1",nome:"",churrasco:false},{id:"g2",nome:"",churrasco:false}], jogadores:Array.from({length:14},(_,i)=>({id:i+1,nome:"",churrasco:false,avulso:false,avulsoPago:false})), espera:[], ausentes:[], churrasco:{confirmado:false,responsavel:"",valorTotal:0,pixChave:"",pixTipo:"Celular",extras:[],pagos:[]} };
+  return { data, dataPartida:"", convites:{inicio:"",fim:"",semana:data,reservas:{}}, goleiros:[{id:"g1",nome:"",churrasco:false},{id:"g2",nome:"",churrasco:false}], jogadores:Array.from({length:14},(_,i)=>({id:i+1,nome:"",churrasco:false,avulso:false,avulsoPago:false})), espera:[], ausentes:[], churrasco:{confirmado:false,responsavel:"",valorTotal:0,pixChave:"",pixTipo:"Celular",extras:[],pagos:[]} };
 }
 
 function dadosIniciais() {
@@ -414,10 +414,18 @@ function renderAba() {
 // ── CONVITES ──────────────────────────────────────────────────────────────────
 function renderConvites(s) {
   const cv=s.convites||{}; const reservas=cv.reservas||{};
-  const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
-  const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
+  const numeros=gerarNumeros(cv.inicio, cv.fim);
   const meuNum=Object.entries(reservas).find(([,u])=>u===uid)?.[0]||null;
   const livres=numeros.filter(n=>!reservas[n]).length; const retirados=numeros.length-livres;
+
+  if(!cv.inicio||!cv.fim) {
+    return `<div class="secao"><div class="secao-body" style="text-align:center;padding:32px">
+      <div style="font-size:40px;margin-bottom:12px">⚽</div>
+      <p style="color:#a08000;font-weight:700;font-size:16px">Convites não configurados</p>
+      <p style="color:#aaa;font-size:13px;margin-top:8px">Aguardando o ADM configurar o intervalo desta semana.</p>
+      ${isAdmin?`<button class="btn-principal" style="margin-top:20px" onclick="abrirConvitesCfg()">⚙️ Configurar intervalo</button>`:""}
+    </div></div>`;
+  }
 
   let html=`<div class="stats-row">
     <div class="stat-card"><div class="stat-num" style="color:#333">${numeros.length}</div><div class="stat-label">Total</div></div>
@@ -465,15 +473,27 @@ function renderConvites(s) {
   return html;
 }
 
-let processandoPegar = false;
+function gerarNumeros(inicio, fim) {
+  if(!inicio || !fim) return [];
+  const arr = [];
+  // Preserva zeros à esquerda usando BigInt
+  let n = BigInt(inicio);
+  const f = BigInt(fim);
+  const tamanho = inicio.length;
+  while(n <= f) {
+    arr.push(n.toString().padStart(tamanho, "0"));
+    n++;
+  }
+  return arr;
+}
 
 async function pegarConvite() {
   if (processandoPegar) return;
   processandoPegar = true;
   try {
     const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
-    const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
-    const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
+    const numeros=gerarNumeros(cv.inicio, cv.fim);
+    if(!numeros.length){toast("Convites não configurados ainda!","erro");return;}
     const meu=Object.entries(reservas).find(([,u])=>u===uid);
     if(meu){dados=d;renderAba();toast("Você já tem o convite "+meu[0]+"!","info");return;}
     const livre=numeros.find(n=>!reservas[n]);
@@ -503,8 +523,8 @@ async function confirmarConvidadoModal() {
   if(!nome){ toast("Digite o nome do convidado","erro"); processandoConvite=false; return; }
   try {
     const d=await lerBin(); const cv=d.semanaAtual.convites||{}; const reservas=cv.reservas||{};
-    const inicio=parseInt(cv.inicio||"56508298105"); const fim=parseInt(cv.fim||"56508298119");
-    const numeros=[]; for(let n=inicio;n<=fim;n++) numeros.push(String(n));
+    const numeros=gerarNumeros(cv.inicio, cv.fim);
+    if(!numeros.length){toast("Convites não configurados ainda!","erro");processandoConvite=false;return;}
     const livre=numeros.find(n=>!reservas[n]);
     if(!livre){toast("Sem convites disponíveis!","erro"); processandoConvite=false; return;}
     reservas[livre]={convidado:nome,geradoPor:uid};
@@ -1358,11 +1378,11 @@ function verResumoSemana(idx){
 
 function abrirConvitesCfg(){
   const cv=dados?.semanaAtual?.convites||{};
-  const inicio=window.prompt("Número inicial:",cv.inicio||"56508298105");if(!inicio)return;
-  const fim=window.prompt("Número final:",cv.fim||"56508298119");if(!fim)return;
+  const inicio=window.prompt("Número inicial (com zeros):",cv.inicio||"");if(inicio===null)return;
+  const fim=window.prompt("Número final (com zeros):",cv.fim||"");if(fim===null)return;
   const semana=window.prompt("Nome da semana:",cv.semana||dados.semanaAtual.data);if(!semana)return;
   const d=JSON.parse(JSON.stringify(dados));
-  d.semanaAtual.convites={inicio,fim,semana,reservas:{}};
+  d.semanaAtual.convites={inicio:inicio.trim(),fim:fim.trim(),semana,reservas:{}};
   gravarBin(d).then(()=>{renderAba();toast("✅ Convites configurados!");});
 }
 
