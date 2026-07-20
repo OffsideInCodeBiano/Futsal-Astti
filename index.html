@@ -553,13 +553,13 @@ function renderLista(s) {
   const thJog=`<div class="th-row"><span style="width:20px">#</span><span style="flex:1">Nome</span><span style="width:62px;text-align:center">Churrasco</span><span style="width:55px;text-align:center">Avulso</span></div>`;
   let jRows=s.jogadores.map((j,i)=>{
     const ehMensalista=mensalistas.includes(j.nome);
-    const ehAvulso=j.nome&&!ehMensalista;
+    const ehAvulso=j.nome && (j.avulso === true || (!ehMensalista && j.avulso !== false));
     return `<div class="linha linha-jogador${!j.nome?" vazio":""}">
       <span class="num-jogador">${j.id}</span>
       ${j.nome
         ?`<span class="nome-linha">${j.nome}${ehMensalista?'<span style="font-size:9px;color:#1a7a3e;font-weight:700;margin-left:4px">M</span>':''}</span>
           <button class="churrasco-tag${j.churrasco?" sim":""}" onclick="toggleChurrasco('jogador',${i})">${j.churrasco?"🍖":"Não"}</button>
-          ${ehAvulso?`<button class="pago-tag ${j.avulsoPago?"pago":"pendente"}" onclick="toggleAvulsoPago(${i})">${j.avulsoPago?"✅ Pago":"💰 Pagar"}</button>`:`<span style="width:55px"></span>`}
+          ${ehAvulso?`<button class="pago-tag ${j.avulsoPago?"pago":"pendente"}" data-avulso-idx="${i}">${j.avulsoPago?"✅ Pago":"💰 Pagar"}</button>`:`<span style="width:55px"></span>`}
           <button style="background:#fff0f0;border:1px solid #e8b0b0;color:#c0392b;border-radius:8px;padding:4px 6px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0" onclick="removerJogador(${i})">✕</button>`
         :`<button class="btn-vaga" onclick="abrirModalEntrada('jogador',${i})">Vaga livre — toque para entrar</button>`
       }
@@ -672,11 +672,10 @@ async function toggleAvulsoPago(idx) {
   const pagando=!j.avulsoPago;
   d.semanaAtual.jogadores[idx].avulsoPago=pagando;
   if(pagando) {
-    const valor=d.mensalistas?.valorAvulso||25;
+    const valor=parseFloat(d.mensalistas?.valorAvulso)||25;
     d.caixa.movimentacoes.push({id:"mov"+Date.now(),tipo:"entrada",desc:`Avulso — ${j.nome}`,valor,data:new Date().toLocaleDateString("pt-BR"),origem:"avulso"});
-    toast("✅ Pagamento registrado! R$ "+valor+" no caixa.");
+    toast("✅ Pagamento registrado! R$ "+valor.toFixed(2)+" no caixa.");
   } else {
-    // Remove a movimentação de avulso mais recente desse jogador
     const idx2=d.caixa.movimentacoes.findLastIndex(m=>m.origem==="avulso"&&m.desc.includes(j.nome));
     if(idx2>=0) d.caixa.movimentacoes.splice(idx2,1);
     toast("Pagamento revertido.","info");
@@ -1235,7 +1234,6 @@ async function confirmarMovimentacao(tipo){
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
 function abrirAdminMenu(){
   if(isAdmin){
-    // Mostra opção super ADM se for super
     document.getElementById("menu-super-adm").style.display = isSuperAdmin ? "flex" : "none";
     abrirModal("overlay-admmenu");
     return;
@@ -1303,6 +1301,7 @@ async function salvarNovaSenhaAdm(){
 }
 
 function abrirGerenciarSenhas(){
+  if(!isSuperAdmin){ toast("Acesso restrito ao Super ADM","erro"); return; }
   const senhas = dados?.senhasAdm || [];
   const el = document.getElementById("lista-senhas-adm");
   if(senhas.length === 0){
@@ -1318,6 +1317,7 @@ function abrirGerenciarSenhas(){
 }
 
 async function excluirSenhaAdm(idx){
+  if(!isSuperAdmin){ toast("Acesso restrito ao Super ADM","erro"); return; }
   if(!confirm("Excluir esta senha ADM?")) return;
   const d = JSON.parse(JSON.stringify(dados));
   d.senhasAdm.splice(idx, 1);
@@ -1374,9 +1374,19 @@ var toastTimer;
 function toast(msg,tipo){
   tipo=tipo||"ok";
   const t=document.getElementById("toast");
+  if(!t) return;
   t.textContent=msg;t.className="toast "+tipo;t.style.display="block";
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display="none";},3500);
 }
+
+// Listener global para botões de avulso pago
+document.addEventListener("click", function(e){
+  const btn = e.target.closest("[data-avulso-idx]");
+  if(btn){
+    const idx = parseInt(btn.getAttribute("data-avulso-idx"));
+    toggleAvulsoPago(idx);
+  }
+});
 
 document.querySelectorAll(".nav-btn").forEach((b,i)=>b.classList.toggle("ativo",i===abaAtual));
 init();
