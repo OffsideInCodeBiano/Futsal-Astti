@@ -441,9 +441,11 @@ function renderConvites(s) {
       <span style="display:block;background:rgba(255,255,255,.12);color:#fff;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;margin-bottom:14px">✅ Confirmado</span>
       <p style="color:rgba(255,255,255,.45);font-size:12px;margin-bottom:18px">Apresente este número na entrada do clube.</p>
       <button class="btn-small" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);width:100%;padding:12px;font-size:14px" onclick="liberarConvite()">Liberar convite</button>
-    </div>`;
+    </div>
+    <button class="btn-block" style="background:#f5f8f5;color:#1a5a8a;border:1px solid #c0d0e8;margin-bottom:16px" onclick="abrirFormConvidado()">👤 Gerar convite para convidado</button>`;
   } else if (livres===0) {
-    html+=`<div class="secao"><div class="secao-body" style="text-align:center;padding:32px"><div style="font-size:40px;margin-bottom:12px">😬</div><p style="color:#a08000;font-weight:700;font-size:18px">Todos retirados!</p></div></div>`;
+    html+=`<div class="secao"><div class="secao-body" style="text-align:center;padding:32px"><div style="font-size:40px;margin-bottom:12px">😬</div><p style="color:#a08000;font-weight:700;font-size:18px">Todos retirados!</p></div></div>
+    <button class="btn-block" style="background:#f5f8f5;color:#1a5a8a;border:1px solid #c0d0e8;margin-bottom:16px" onclick="abrirFormConvidado()">👤 Gerar convite para convidado</button>`;
   } else {
     html+=`<div class="secao"><div class="secao-body" style="text-align:center;padding:20px">
       <p style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Convites disponíveis</p>
